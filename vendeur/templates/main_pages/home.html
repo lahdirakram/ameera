@@ -7,7 +7,7 @@
 	</div>
 	<nav  class="navbar sticky-top navbar-expand-lg navbar-inverse navbar-light bg-light" style="box-shadow: 0 5px 10px 0 #0000000f;">
 		<div class="container">
-			<a class="navbar-brand" href="/"><img src="{% static 'logo2.png' %} " width="150"></a>    
+			<a class="navbar-brand" href="/"><img src="{% static 'img/logo2.png' %} " width="150"></a>
 			<ul class="navbar-nav ml-auto mt-2 mt-lg-0" >
 				<!-- <li class="nav-item"><a href="#" class="nav-link" id="connect">Connect</a></li> -->
 			</ul>
@@ -27,7 +27,7 @@
 				<div class="has-errors text-danger small">
 				{{form.non_field_errors}}
 				</div>
-					
+
                 <div class="form-group">
 				    {{ form.user_name.label_tag }}
 				    {{ form.user_name }}
@@ -64,7 +64,7 @@
 					$('#welcom_text').fadeIn("slow");
 					form=false;
 				});
-					
+
 			}
 		})
 	</script>

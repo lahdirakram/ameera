@@ -2,22 +2,23 @@
 {% load static %}
 {% block body %}
 <body>
-  <div  class="sticky-top">    
+  <div  class="sticky-top">
   <nav  class="navbar  navbar-expand-lg navbar-light bg-light" style="box-shadow: 0 5px 10px 0 #0000000f;">
-      
-        <a class="navbar-brand" href="/"><img src="{% static 'img/logo2.png' %} " width="150"></a>    
+
+        <a class="navbar-brand" href="/"><img src="{% static 'img/logo2.png' %} " width="150"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_id" aria-controls="navbar_id" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <p id="response" style="display: none;margin: auto 0;padding: 10px;font-size: initial;font-weight: bold;"></p> 
-        <div class="collapse navbar-collapse" id="navbar_id"> 
+        <p id="response" style="display: none;margin: auto 0;padding: 10px;font-size: initial;font-weight: bold;"></p>
+        <div class="collapse navbar-collapse" id="navbar_id">
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0" >
             <li class="nav-item {% block activeP %}{% endblock%}"><a href="{% url 'produit' %}" class="nav-link"> Produits </a></li>
             <li class="nav-item {% block activeS %}{% endblock%}"><a href="{% url 'stat' %}" class="nav-link"> Statistiques </a></li>
-            <li class="nav-item" style="display: none;"><a href="{% static 'ameeralondonDZ.mp4'%}" class="nav-link"> Download Video </a></li>
+            {% if user.vend_admin == 1 %}
             <li class="nav-item {% block activeV %}{% endblock%}"><a href="{% url 'vendre' %}" class="nav-link"> Vendre </a></li>
             <li class="nav-item {% block activeSto %}{% endblock%}"><a href="{% url 'stock' %}" class="nav-link"> Stock </a></li>
             <li class="nav-item {% block activeAdm %}{% endblock%}"><a href="{% url 'administration' %}" class="nav-link"> Administration </a></li>
+            {% endif %}
           </ul>
           <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
             <li class="nav-item">
@@ -64,7 +65,7 @@
                   <i class="fa fa-square fa-stack-2x"></i>
                   <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
                 </span>
-              
+
             </li>
           </ul>
         </div>
@@ -78,4 +79,3 @@
   </footer>
 </body>
 {% endblock %}
-      

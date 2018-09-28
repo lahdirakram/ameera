@@ -25,7 +25,7 @@ SECRET_KEY = '_t2t5$bi_bp6#0@=r#p861%e807v@2swpu&&f8zhnr@uqlnorb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.42.144','192.168.43.155','localhost']
+ALLOWED_HOSTS = ['akramdzbuisness.pythonanywhere.com']
 
 
 # Application definition
@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'vendeur.apps.VendeurConfig',
-    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -123,6 +122,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS= (
     os.path.join(BASE_DIR,'static'),
 )
+STATIC_ROOT='/home/akramdzbuisness/ameera/static'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

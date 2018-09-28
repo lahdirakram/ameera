@@ -5,16 +5,14 @@ import datetime
 from django.http import JsonResponse
 from dateutil.relativedelta import relativedelta
 from .forms import ProdForm,Connect
-from django.utils.crypto import get_random_string
-import hashlib
 import locale
-from .tasks import create_random
 from .functions import Hash
+
 # Create your views here.
 locale.setlocale(locale.LC_ALL, 'fr_FR.utf8')
 
 def produit(request):
-	user = check_in(request) 
+	user = check_in(request)
 	if  user == None:
 		return redirect('home')
 
@@ -24,7 +22,7 @@ def produit(request):
 		prod_list.append(prod_one)
 
 	saved=''
-	
+
 	if request.method == 'POST':
 		form = ProdForm(request.POST, request.FILES)
 		if form.is_valid():
@@ -34,13 +32,13 @@ def produit(request):
 	return render(request,'main_pages/produits.html',{'prod_list':prod_list,'saved':saved,'user':user})
 
 def stat(request):
-	user = check_in(request) 
+	user = check_in(request)
 	if  user == None:
-		return redirect('home')	
+		return redirect('home')
 	return render(request,'main_pages/stat.html',{'user':user})
 
 def vendre(request):
-	user = check_in(request) 
+	user = check_in(request)
 	if  user == None:
 		return redirect('home')
 
@@ -48,7 +46,7 @@ def vendre(request):
 	for prod in Product.objects.raw("select * from vendeur_product"):
 		prod_one={'id':prod.id,'name':prod.prod_name,'image':prod.prod_image,'pu':prod.prod_PU,'qte':prod.prod_Q,'sell':prod.prod_sell}
 		prod_list.append(prod_one)
-	
+
 	if request.method=="POST":
 		vendeur_id=request.POST.get('vendeur_id')
 		prod_id=request.POST.get('prod_id')
@@ -63,7 +61,7 @@ def vendre(request):
 		else:
 			h_p_s=prod.prod_PU-int(pu)
 			price=int(pu)
-		try:	
+		try:
 			vend =vendeur.objects.get(vend_code=vendeur_id)
 		except:
 			vend=None
@@ -89,11 +87,11 @@ def vendre(request):
 		else:
 			print('vend error :'+vendeur_id)
 
-			
+
 	return render(request,'main_pages/vendre.html',{'prod_list':prod_list,'user':user})
 
 def stock(request):
-	user = check_in(request) 
+	user = check_in(request)
 	if  user == None:
 		return redirect('home')
 
@@ -137,7 +135,7 @@ def home(request):
 				response.set_cookie('remember_me',hashes['hashed'],max_age=3600*24*10)
 				return response
 			else:
-				form.add_error(None,'Nom d\'utilisateur ou mot de passe erroné')		
+				form.add_error(None,'Nom d\'utilisateur ou mot de passe erroné')
 	else:
 		form=Connect()
 		if 'remember_me' in request.COOKIES:
@@ -156,7 +154,7 @@ def deconncter(request):
 	return response
 
 def administration(request):
-	user = check_in(request) 
+	user = check_in(request)
 	if  user == None:
 		return HttpResponse('')
 	if user.vend_admin == 0:
@@ -177,7 +175,7 @@ def administration(request):
 
 
 
-	return render(request,'main_pages/administration.html',{'employes':employes,'products':products})		
+	return render(request,'main_pages/administration.html',{'employes':employes,'products':products,'user':user})
 
 
 
@@ -188,7 +186,7 @@ def administration(request):
 
 def update_hist(request):
 	res='notdone'
-	user = check_in(request) 
+	user = check_in(request)
 	if  user == None:
 		return HttpResponse(res)
 	if request.method == "POST":
@@ -208,12 +206,12 @@ def check_in(request):
 
 def stat_prod_list(request):
 
-	user = check_in(request) 
+	user = check_in(request)
 	if  user == None:
 		return HttpResponse('Error')
 
 	print_=None
-	
+
 	if request.method == "POST":
 		prod_list=[]
 		for prod in Product.objects.raw("select p.id,p.prod_name,p.prod_Q,p.prod_sell,sum(h.hist_money) total from vendeur_product p,vendeur_history h where p.id=h.hist_prod_id_id and p.id>0 and h.hist_etat = 1 group by h.hist_prod_id_id"):
@@ -227,11 +225,11 @@ def stat_prod_list(request):
 	return render(request,'parts_of_pages/stat_prod_list.html',{'prod_list':prod_list,'print':print_})
 
 def stat_hist_list(request):
-	user = check_in(request) 
+	user = check_in(request)
 	if  user == None:
 		return HttpResponse('Error')
 	hist_list=[]
-	date_deb=datetime.date.today().replace(day=1)	
+	date_deb=datetime.date.today().replace(day=1)
 	date_fin=date_deb + relativedelta(months=1) - relativedelta(day=1)
 	if request.method=="POST":
 		if request.POST.get('date_debut') is not None:
@@ -246,7 +244,7 @@ def stat_hist_list(request):
 	return JsonResponse({'hist_list':hist_list,'date_deb':date_deb,'date_fin':date_fin})
 
 def stat_employe_list(request):
-	user = check_in(request) 
+	user = check_in(request)
 	if  user == None:
 		return HttpResponse('Error')
 
@@ -256,7 +254,7 @@ def stat_employe_list(request):
 
 	return render(request,'parts_of_pages/stat_employe_list.html',{'emp_list':emp_list})
 def stat_ventes_non_paye(request):
-	user = check_in(request) 
+	user = check_in(request)
 	if  user == None:
 		return HttpResponse('Error')
 
@@ -269,7 +267,7 @@ def stat_ventes_non_paye(request):
 	return render(request,'parts_of_pages/stat_ventes_non_paye.html',{'v_n_p':v_n_p,'print':print_})
 
 def stat_graph(request):
-	user = check_in(request) 
+	user = check_in(request)
 	if  user == None:
 		return redirect('home')
 
@@ -279,7 +277,7 @@ def stat_graph(request):
 	sell_list=[]
 	money_list=[]
 
-	date_deb=datetime.date.today().replace(day=1)	
+	date_deb=datetime.date.today().replace(day=1)
 	date_fin=date_deb + relativedelta(months=1) - relativedelta(day=1)
 
 	if request.method=="POST":
@@ -306,7 +304,7 @@ def stat_graph(request):
 
 ############################" PRINT"
 def print_stat(request):
-	user = check_in(request) 
+	user = check_in(request)
 	if  user == None:
 		return HttpResponse('Error')
 	return render(request,'print_files/stat.html')
