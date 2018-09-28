@@ -1,0 +1,87 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block title %}| Administration{% endblock %}
+{% block activeAdm %}active{% endblock%}
+{% block content %}
+<div class="container">
+	<div id="table_des_ventes" class="stat_table_container">
+		<div class="row">
+			<div class="col-8">
+				<h4>Table des ventes</h4>
+			</div>
+			<div class="col-4" style="text-align:right; ">
+				<button class="btn btn-outline-dark btn-sm "style="margin-bottom: 10px; ">Nouveau<br class="d-md-none"> produit</button>
+			</div>
+		</div>
+				
+		<table class="table table-responsive-sm ">
+			<thead>
+				<tr>
+					<th>#Code</th>
+					<th>Produit</th>
+					<th>Image</th>
+					<th>Quantité disponible</th>
+					<th>Prix (DZD)</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody id="prod_list_table">
+				{% for p in products %}
+					<tr>
+						<td>{{p.code}}</td>
+						<td>{{p.nom}}</td>
+						<td><a href="{{p.image}}"  target="_blank">Click</a></td>
+						<td>{{p.qte}}</td>
+						<td>{{p.prix}}</td>
+						<td style="text-align: right;">
+							{% if p.sell == 0 %}
+								<button class="btn btn-outline-dark btn-sm">Supprimer</button>
+							{% endif %}
+							<button class="btn btn-outline-dark btn-sm">Modifier</button>
+						</td>
+
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>		
+	<div id="employe" class="stat_table_container">
+		<div class="row">
+			<div class="col-8">
+				<h4>Employés</h4>
+			</div>
+			<div class="col-4" style="text-align:right; ">
+				<button class="btn btn-outline-dark btn-sm "style="margin-bottom: 10px; ">Nouveau<br class="d-md-none"> Employe</button>
+			</div>
+		</div>
+			
+		<div style="overflow: auto; max-height: 500px;">
+		<table class="table table-responsive-sm ">
+			<thead>
+				<tr>
+					<th>#Code</th>
+					<th>Nom</th>
+					<th>Username</th>
+					<th>Type</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody id="adm_employe_list">
+				{% for e in employes %}
+					<tr>
+						<td>{{e.id}}</td>
+						<td>{{e.nom}}</td>
+						<td>{{e.username}}</td>
+						<td>{{e.type}}</td>
+						<td style="text-align: right;">
+							<button class="btn btn-outline-dark btn-sm">Modifier</button>
+							<button class="btn btn-outline-dark btn-sm">Supprimer</button>
+						</td>
+					</tr>
+				{% endfor%}
+			</tbody>
+		</table>
+		</div>
+	</div>
+</div>
+{% endblock %}

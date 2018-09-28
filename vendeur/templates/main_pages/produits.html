@@ -1,0 +1,84 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block title %}| Produit{% endblock %}
+{% block activeP %}active{% endblock%}
+{% block content %}
+<style type="text/css">	
+	.b:hover{
+		color: #1b1d1f!important;
+	}
+	.prod_details{
+		text-align:center;
+	}
+	.prod_details p,.prod_details small{
+		font-size: 12px;
+		color: #232323;
+		margin: auto; 
+		font-family: Montserrat;color: #232323;
+		display: inline-block;
+	}
+	.prod_details small {
+	    filter: opacity(70%);
+	}
+</style>
+<div class="container">
+	<div class="row" style="margin: 0px">
+		{% for prod in prod_list %}
+	    <div class=" col-lg-4 col-sm-6 border-bottom" style="padding-bottom: 20px">
+			<div class="product-image"  style="overflow: hidden;">
+				<img src="{{prod.image}}" >
+			</div>
+			<div class="prod_details" style="text-align: center;">
+				<p>{{ prod.name }}</p> - <small >{{ prod.pu }} DZD</small>
+			</div>
+		</div>
+		{% endfor %}
+		<script type="text/javascript">
+			$('.product-image').css('max-height',$('.product-image').width());
+		</script>
+		 <div class=" col-lg-4 col-sm-6 border-bottom" style="padding-bottom: 20px">
+			<div id="add_prod">
+				<div class="product-image" style="text-align: center;">
+					<button class="btn btn-link text-dark b" style="margin-top: 20%; " id="add_prod_button">
+					<i class="fa fa-plus fa-10x"></i>
+					</button>
+				</div>
+				<div style="text-align: center;">
+					<p style="margin: auto;">Ajouter un produit</p>
+				</div>
+			</div>
+			<div id="add_prod_form">
+				<form method="POST" style="padding: 20px;" enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="form-group">
+						<input class="form-control " type="text" name="prod_name" placeholder="Nom du produit">
+					</div>
+					<div class="form-group">
+						<input class="form-control " type="number" name="prod_PU" placeholder="Prix du produit">
+					</div>
+					<div class="form-group">
+						<input class="form-control " type="number" name="prod_Q" placeholder="qte">
+					</div>
+					<div class="form-group">
+						<input class="form-control " type="number" name="prod_sell" placeholder="qte vendu" value="0" hidden>
+					</div>
+					<div class="form-group">
+						<input class="form-control " type="file" name="prod_image" >
+					</div>
+					<div class="form-group">
+						<input type="submit" name="valide" value="Valider" class="form-control " style="max-width: 100%">
+					</div>
+				</form>
+			</div>
+			<script type="text/javascript">
+				$('#add_prod_form').hide();
+				$("#add_prod_button").click(function () {
+					$('#add_prod').hide();
+					$('#add_prod_form').show();
+				})
+			</script>
+		</div>
+	</div>
+</div>
+{% endblock%}
+	

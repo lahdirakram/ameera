@@ -1,0 +1,15 @@
+{% for prod  in prod_list %}
+	<tr>
+		<td>{{prod.name}}</td>
+		<td>{{prod.qte}}</td>
+		<td>{{prod.sell}}</td>
+		<td class="total">{{prod.total}}</td>						
+		<td class="credit">{{prod.credit}}</td>
+		{% if print is None %}
+			<td>
+				<div style="margin: 10%; padding: 10px; border-radius: 5%;{% if prod.qte == 0 %}color: white; background: #fb1a1a;{% endif %}{% if prod.qte <= 5 and prod.qte > 0 %}color: white; background: #ff9800;{% endif %}{% if prod.qte > 5 %}color: white; background: green;{% endif %}">
+			 	</div>
+			</td>
+		{% endif %}
+	</tr>
+{% endfor %}

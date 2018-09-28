@@ -1,0 +1,14 @@
+{% for np in v_n_p %}
+<tr>
+	<td>{{np.hist_date}}</td>
+	<td>{{np.hist_prod_id.prod_name}}</td>
+	<td>{{np.hist_nbr_sell}}</td>
+	<td>{{np.hist_money}}</td>
+	{% if print is None %}
+	<td id="{{np.id}}" class="marquer_come" style="text-align: center;" >
+		<button class="btn btn-outline-dark btn-sm" onclick="update_history('{{np.id}}')">Marquer comme payé</button>
+		<i class="fas fa-check-circle" style="display: none;color: #4be251;"></i>
+	</td>
+	{% endif %}
+</tr>
+{% endfor %}

@@ -1,0 +1,81 @@
+{% extends 'layout/head.html' %}
+{% load static %}
+{% block body %}
+<body>
+  <div  class="sticky-top">    
+  <nav  class="navbar  navbar-expand-lg navbar-light bg-light" style="box-shadow: 0 5px 10px 0 #0000000f;">
+      
+        <a class="navbar-brand" href="/"><img src="{% static 'img/logo2.png' %} " width="150"></a>    
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_id" aria-controls="navbar_id" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <p id="response" style="display: none;margin: auto 0;padding: 10px;font-size: initial;font-weight: bold;"></p> 
+        <div class="collapse navbar-collapse" id="navbar_id"> 
+          <ul class="navbar-nav mr-auto mt-2 mt-lg-0" >
+            <li class="nav-item {% block activeP %}{% endblock%}"><a href="{% url 'produit' %}" class="nav-link"> Produits </a></li>
+            <li class="nav-item {% block activeS %}{% endblock%}"><a href="{% url 'stat' %}" class="nav-link"> Statistiques </a></li>
+            <li class="nav-item" style="display: none;"><a href="{% static 'ameeralondonDZ.mp4'%}" class="nav-link"> Download Video </a></li>
+            <li class="nav-item {% block activeV %}{% endblock%}"><a href="{% url 'vendre' %}" class="nav-link"> Vendre </a></li>
+            <li class="nav-item {% block activeSto %}{% endblock%}"><a href="{% url 'stock' %}" class="nav-link"> Stock </a></li>
+            <li class="nav-item {% block activeAdm %}{% endblock%}"><a href="{% url 'administration' %}" class="nav-link"> Administration </a></li>
+          </ul>
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+              <p style="margin: 0;padding: 0.5rem 0rem;padding-right: 1rem; display: inline;" >{{user.vend_name}}</p>
+              <a style="display: inline;" href="{% url 'deconncter' %}" class="nav-link">Deconnecter</a></li>
+          </ul>
+        </div>
+  </nav>
+  {% block stat_nav %}{% endblock %}
+  </div>
+  {% block content%}{% endblock%}
+  <footer class="footer navbar-dark bg-dark" >
+    <div class="container" style="padding: 20px;">
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <ul class="list-unstyled footer-item " style="margin: auto;">
+            <li>
+              <span class="fa-stack" style="vertical-align: unset;">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fas fa-map-marker-alt fa-stack-1x fa-inverse"></i>
+              </span>
+              <p style="color: white;">Centre commercial Bebezzouar <br> <b>Alger,Algerie</b> </p>
+            </li>
+            <li>
+              <span class="fa-stack" >
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fas fa-phone fa-stack-1x fa-inverse"></i>
+              </span>
+              <p style="color: white;"> <b>+213 550 69 93 86</b> </p>
+            </li>
+            <li>
+              <span class="fa-stack" >
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+              </span>
+              <p style="color: white;"> <b>contact@ameeralondon.com</b> </p>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <ul class="list-unstyled footer-item">
+            <li>
+                <span class="fa-stack" >
+                  <i class="fa fa-square fa-stack-2x"></i>
+                  <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                </span>
+              
+            </li>
+          </ul>
+        </div>
+      </div>
+      <hr style="color: white;">
+      <div style="color: white;text-align: center;">
+        <p>{% now "Y" %} © All rights reserved . </p>
+        <span>Icon made by <a title="Freepik" href="http://www.freepik.com">Freepik</a> from <a title="Flaticon" href="http://www.flaticon.com">www.flaticon.com</a>&nbsp;</span>
+      </div>
+    </div>
+  </footer>
+</body>
+{% endblock %}
+      

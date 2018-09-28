@@ -1,0 +1,402 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block title %}| Statistique{% endblock %}
+{% block activeS %}active{% endblock%}
+{% block stat_nav %}
+<style type="text/css">
+	.nav-link{
+		z-index: 1300;
+	}
+</style>
+	<nav id="navbar" class="navbar navbar-expand navbar-expand-lg navbar-dark bg-dark "  style="/*position: sticky;top: 14%;*/padding: 0;">
+		<ul class="navbar-nav justify-content-center d-none d-md-flex m-auto svg_nav"
+			style="border-right: 1px solid white;
+				   border-right: 2px solid white;
+    			   border-left: 2px solid white;" >
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'print_stat' %}" target="_blank">
+					<p class="m-0">Imprimer</p>
+				</a>
+			</li>
+		</ul>
+		<ul class="navbar-nav justify-content-center d-none d-md-flex navbar-expand m-auto" >
+			<li class="nav-item "><a href="#" class="nav-link" onclick="scrolto('#table_des_ventes',this)">Table des ventes</a></li>
+			<li class="nav-item "><a href="#" class="nav-link" onclick="scrolto('#historique_des_ventes',this)">Historique des ventes</a></li>
+			<li class="nav-item "><a href="#" class="nav-link" onclick="scrolto('#ventes_non_paye',this)">Ventes non payé</a></li>
+			<li class="nav-item "><a href="#" class="nav-link" onclick="scrolto('#employe',this)">Employés </a></li>
+			<li class="nav-item "><a href="#" class="nav-link" onclick="scrolto('#graph_section',this)">Graphes </a></li>
+		</ul>
+		<ul class="navbar-nav justify-content-center d-md-none m-auto svg_nav"
+			style="border-right: 1px solid white;
+				   border-right: 2px solid white;
+    			   border-left: 2px solid white;" >
+			<li class="nav-item ">
+				<a class="nav-link" href="{% url 'print_stat' %}" target="_blank">
+					<img src="{% static 'svg/printer.svg' %}">
+				</a>
+			</li>
+		</ul>
+		<ul class="navbar-nav justify-content-center d-md-none m-auto svg_nav" >
+			<li class="nav-item "><a href="#" class="nav-link" onclick="scrolto_sm('#table_des_ventes',this)">
+				<img src="{% static 'svg/warehouse.svg'%}">
+			</a></li>
+			<li class="nav-item "><a href="#" class="nav-link" onclick="scrolto_sm('#historique_des_ventes',this)">
+				<img src="{% static 'svg/history-clock-button.svg'%}">
+			</a></li>
+			<li class="nav-item "><a href="#" class="nav-link" onclick="scrolto_sm('#ventes_non_paye',this)">
+				<img src="{% static 'svg/no-dollars-accepted.svg'%}">
+			</a></li>
+			<li class="nav-item "><a href="#" class="nav-link" onclick="scrolto_sm('#employe',this)">
+				<img src="{% static 'svg/manager.svg'%}">
+			</a></li>
+			<li class="nav-item "><a href="#" class="nav-link" onclick="scrolto_sm('#graph_section',this)">
+				<img src="{% static 'svg/statistics.svg'%}">
+			</a></li>
+		</ul>
+	</nav>
+{% endblock %}
+{% block content %}
+<style type="text/css">
+	.outil li{
+		padding: 10px 0;
+		display: grid;
+		text-align: center;
+	}
+	.outil button{
+		width: 100%;
+		text-align: center;
+	}
+</style>
+<!-- <div class="row" style="margin: 0;"> -->
+<!-- <div class="col-1" >
+	<ul class="outil list-unstyled m-0" >
+		<li><a class="btn btn-outline-dark btn-sm" href="{% url 'print_stat' %}" target="_blank"><i class="fas fa-print fa-3x"></i></a><p class="m-0">Imprimer</p></li>
+	</ul>
+</div> -->
+<div class="container">
+	<div id="table_des_ventes" class="stat_table_container">
+		<h4>Table des ventes</h4>
+		<table class="table table-responsive-sm ">
+			<thead>
+				<tr>
+					<th>Produit</th>
+					<th>Quantité disponible</th>
+					<th>Quantité vendu</th>
+					<th>Total</th>
+					<th>Credit</th>
+					<th>Etat</th>
+				</tr>
+			</thead>
+			<tbody id="prod_list_table">
+			</tbody>
+			<tfooter>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td id="total_amount" style="font-weight: bold"></td>
+					<td id="total_credit" style="font-weight: bold"></td>
+					<td></td>
+
+				</tr>
+			</tfooter>
+		</table>
+	</div>								
+	<div id="historique_des_ventes" class="stat_table_container" >
+		<div class="row">
+			<div class="col-9">
+				<h4>Historique des ventes</h4>
+			</div>
+			<div class="col-3">
+				<button class="btn btn-outline-dark btn-sm" id="hist-opt" style="float: right;" >Periode</button>
+				<div id="hist-opt-div" style="z-index: 1;position: absolute;top: 0;right: 20%;background: white;border: 1px solid#dee2e6;">
+					<div style="position: relative;padding: 20px;">
+					<div class="form-group">
+						<label>Date debut :</label>
+						<input class="form-control" type="date" name="date-debut" id="hist_date_debut" value="{{d_d}}">
+						<small>Entre la date de debut du calcul.</small>
+					</div>
+					<div class="form-group">
+						<label>Date fin :</label>
+						<input class="form-control" type="date" name="date-fin" id="hist_date_fin" value="{{d_f}}">
+						<small>Entre la date de fin du calcul.</small>
+					</div>
+					<input type="submit" name="sub"  class="form-control btn btn-dark" id="hist_opt_sub">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="overflow: auto; max-height: 500px;">
+		<table class="table table-responsive-sm">
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Produit</th>
+					<th>Quantité Vendu</th>
+					<th>Réduction (Unitaire)</th>
+					<th>Etat de payement</th>
+					<th>Total</th>
+				</tr>
+			</thead>
+			<tbody id="hist_list_table">
+			</tbody>
+		</table>
+		</div>
+	</div>
+	
+	<script type="text/javascript">	
+		function update_history(id) {
+			$.ajax({
+				url:"{% url 'update_history' %}",
+				type: 'POST',
+				data: { hist_id: id , csrfmiddlewaretoken : '{{csrf_token}}'  },
+				success:function (res) {
+					if (res == 'done') {
+						$('#'+id+' > button').hide();
+						$('#'+id+' > i ').show();
+					}else{
+						alert('erreur');
+					}
+				}
+			});
+		}
+	</script>
+	<div id="ventes_non_paye" class="stat_table_container">
+		<h4>Ventes non payé</h4>
+		<div style="overflow: auto; max-height: 500px;">
+		<table class="table table-responsive-sm ">
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Produit</th>
+					<th>Quantité Vendu</th>
+					<th>Total</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody id="stat_ventes_non_paye" onchange="$('.marquer_come').css('min-width',$('.marquer_come').width())">
+				
+			</tbody>
+			<tfooter>
+				
+			</tfooter>
+		</table>
+		</div>
+	</div>
+	<div id="employe" class="stat_table_container">
+		<h4>Employés</h4>
+		<div style="overflow: auto; max-height: 500px;">
+		<table class="table table-responsive-sm ">
+			<thead>
+				<tr>
+					<th>Nom</th>
+					<th>N° ventes</th>
+					<th>N° absence</th>
+					<th>Total argent</th>
+				</tr>
+			</thead>
+			<tbody id="stat_employe_list">
+			</tbody>
+		</table>
+		</div>
+	</div>
+	<div id="graph_section" style=" margin: 10px 0;">
+		<div class="row" style="max-width: 100%;margin: auto; background: white;">
+		<div class="col-8" style="padding: 0;">
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+		  <li class="nav-item">
+		    <a class="nav-link active" id="ventes-tab" data-toggle="tab" href="#ventes" role="tab" aria-controls="ventes" aria-selected="true" onclick="setTimeout(function () {ventes.reflow();},500);">Ventes</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link" id="money-tab" data-toggle="tab" href="#money" role="tab" aria-controls="money" aria-selected="false" 
+		    onclick="setTimeout(function () {money.reflow();},500);">Money</a>
+		  </li>
+		</ul>
+		</div>
+		<div class="col-4" style="position: relative; padding: 0; border-bottom: 1px solid #dee2e6; ">
+				<button class="btn btn-outline-dark btn-sm" id="graph-opt" style="float: right;" onclick="graph_form_on_off();">Periode</button>
+				<div id="graph-opt-div" style="z-index: 1;position: absolute;top: 0;right: 20%;background: white;border: 1px solid#dee2e6;">
+					<div style="position: relative;padding: 20px;">
+					{% csrf_token %}
+					<div class="form-group">
+						<label>Date debut :</label>
+						<input class="form-control" type="date" name="date-debut" id="date-debut" value="{{d_d}}">
+						<small>Entre la date de debut du calcul.</small>
+					</div>
+					<div class="form-group">
+						<label>Date fin :</label>
+						<input class="form-control" type="date" name="date-fin" id="date-fin" value="{{d_f}}">
+						<small>Entre la date de fin du calcul.</small>
+					</div>
+					<button id="graph_valider" class="form-control btn btn-dark" >Valider</button>
+					</div>
+				</div>
+				<script type="text/javascript">
+					function graph_form_on_off() {
+					  if (graph_opt_div) {
+					    $('#graph-opt-div').hide();
+					    graph_opt_div=false;
+					  }else {
+					    $('#graph-opt-div').show();
+					    graph_opt_div=true;
+					  }
+					}
+					$('#graph_valider').click(function () {
+					  graph_form_on_off();
+					  chart_update($('#date-debut').val(),$('#date-fin').val());  
+					});
+					$('#graph-opt-div').hide();
+					var graph_opt_div=false;
+				</script>
+		</div>
+		</div>
+		<div class="tab-content" id="myTabContent" 
+			style="border: 1px solid #dee2e6;border-top: none;">
+			<div id="ventes" class="tab-pane fade show active" role="tabpanel" aria-labelledby="ventes-tab"></div>
+			<div id="money" class="tab-pane fade"role="tabpanel" aria-labelledby="money-tab"></div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	//---------- PRODUIT
+	$('#prod_list_table').ready(function () {
+		$.ajax({
+			url:"{% url 'stat_prod_list' %}",
+			type: 'POST',
+			data: { csrfmiddlewaretoken : '{{ csrf_token }}'},
+			success:function (res) {
+				if (res != 'Error') {
+					$('#prod_list_table').html(res)
+					setTimeout(function () {
+						totals=document.getElementsByClassName('total');
+						credits=document.getElementsByClassName('credit');
+						sumT=0;
+						sumC=0;
+						for (var i = 0; i < totals.length; i++) {
+							sumT+=parseInt(totals[i].innerHTML);
+							sumC+=parseInt(credits[i].innerHTML);
+						}
+						$('#total_amount').html(''+sumT);
+						$('#total_credit').html(''+sumC);
+					},500);
+				}else{
+					alert('erreur');
+				}
+			}
+		});
+	});
+	//---------- HISTORIQUE
+	$('#hist-opt-div').hide();
+	var hist_opt_div=false;
+
+	$('#hist-opt').click(function () {
+		if (hist_opt_div) {
+			$('#hist-opt-div').hide();
+			hist_opt_div=false;
+		}else {
+			$('#hist-opt-div').show();
+			hist_opt_div=true;
+		}
+	});
+//____________________________________________________________________________________________________________
+	function hist_table_show(d_d,d_f) {
+		if (d_d == null || d_f== null) var hist_d={csrfmiddlewaretoken : '{{ csrf_token }}'};
+		else var hist_d={date_debut:d_d, date_fin:d_f, csrfmiddlewaretoken : '{{ csrf_token }}'};
+		$.ajax({
+			url:"{% url 'stat_hist_list' %}",
+			type: 'POST',
+			data: hist_d,
+			success:function (res) {
+				if (res != 'Error') {
+					$('#hist-opt-div').hide();
+					hist_opt_div=false;
+
+					hist_html='';
+					for (var i = 0; i < res['hist_list'].length; i++) {
+						hist=res['hist_list'][i];
+						if(hist['pred']==null)pred='/';else pred='-'+hist['pred'];
+						if(hist['etat']==0)etat='Non paye';else etat='Paye';
+						hist_html+='<tr>'; 
+						hist_html+='<td>'+hist['date']+'</td><td>'+hist['prod']+'</td><td>'+hist['qte']+'</td><td>'+pred+'</td><td>'+etat+'</td><td>'+hist['money']+'</td>';
+						hist_html+='</tr>';
+					}
+					$('#hist_list_table').html(hist_html);
+					$('#hist_date_debut').val(res['date_deb']);
+					$('#hist_date_fin').val(res['date_fin']);
+				}else{
+					alert('erreur');
+				}
+			}
+		});
+	}
+	$('#hist_opt_sub').click(function () {hist_table_show($('#hist_date_debut').val(),$('#hist_date_fin').val());});
+	$('#hist_list_table').ready(function () {hist_table_show(null,null);});
+//________________________________________________________________________________________________________________________
+	$('#stat_ventes_non_paye').ready(function () {
+		$.ajax({
+			url:"{% url 'stat_ventes_non_paye'%}",
+			type:'POST',
+			data:{csrfmiddlewaretoken : '{{csrf_token}}'},
+			success:function (res) {
+				if (res != 'Error') {
+					$('#stat_ventes_non_paye').html(res);
+				}
+			}
+		});
+	});
+	//---------- EMPLOYES
+	$('#stat_employe_list').ready(function () {
+		$.ajax({
+			url:"{% url 'stat_employe_list' %}",
+			type:"POST",
+			data:{csrfmiddlewaretoken : '{{csrf_token}}'},
+			success:function (res) {
+				if (res != 'Error') {
+					$('#stat_employe_list').html(res)
+				}else{
+					alert('erreur');
+				}
+			}
+		});
+	});
+
+	$('#myTabContent').ready(chart_update(null,null));
+	function chart_update(date_deb,date_fin) {
+		if (date_deb == null )var d={csrfmiddlewaretoken : '{{csrf_token}}'};
+		else var d ={date_debut:date_deb,date_fin:date_fin,csrfmiddlewaretoken : '{{csrf_token}}'}; 
+		$.ajax({
+			url:"{% url 'stat_graph' %}",
+			type:"POST",
+			data:d,
+			dataType: "json",
+			success:function (res) {
+				graph__=res;
+				graph__["money_graph_series"]=dict_to_utc(graph__["money_graph_series"]);
+				graph__["ventes_graph_series"]=dict_to_utc(graph__["ventes_graph_series"]);
+
+				money = Highcharts.chart('money', {
+				 	title: {text: 'Variation des recette'},
+				 	subtitle: {text: 'Source: carnet de ventes'},
+				 	xAxis: {type: 'datetime',dateTimeLabelFormats: {month: '%e. %b',year: '%b'},title: {text: 'Date'}},
+				 	yAxis: {min: 0,title: {text: 'Argent'}},
+				 	tooltip: {headerFormat: '<span style="font-size:10px">Jour :{point.key}</span><table>',pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +'<td style="padding:0"><b>{point.y}</b></td></tr>',footerFormat: '</table>',shared: true,useHTML: true},
+				 	legend: {layout: 'vertical',align: 'right',verticalAlign: 'middle'},
+				 	series: graph__["money_graph_series"],
+				 	responsive: {rules: [{condition: {maxWidth: 500},chartOptions: {legend: {layout: 'horizontal',align: 'center',verticalAlign: 'bottom'}}}]}
+			 	});
+			 	ventes  =Highcharts.chart('ventes', {
+				    chart: {type: 'column'},
+				    title: {text: 'Graph des ventes'},subtitle: {text: 'Source: carnet de caisse'},
+				    xAxis: {type: 'datetime',dateTimeLabelFormats: {month: '%e. %b',year: '%b'},title: {text: 'Date'}},
+				    yAxis: {min: 0,title: {text: 'Ventes'}},
+				    tooltip: {headerFormat: '<span style="font-size:10px">{point.key}</span><table>',pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +'<td style="padding:0"><b>{point.y}</b></td></tr>',footerFormat: '</table>',shared: true,useHTML: true},
+				    plotOptions: {column: {pointPadding: 0.2,borderWidth: 0}},
+				    series: graph__["ventes_graph_series"]});
+			 	$('#date-debut').val(graph__['d_d']);
+			 	$('#date-fin').val(graph__['d_f']);
+				}
+		});
+	}
+	
+</script>
+{% endblock %}

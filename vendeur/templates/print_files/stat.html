@@ -1,0 +1,160 @@
+{% extends 'layout/head.html' %}
+{% load static %}
+{% block body %}
+<style type="text/css">
+	table{
+		margin: auto;
+		width: 100%;
+	}
+</style>
+<div class="container">
+	<div>
+		<h4>Table des ventes</h4>
+		<table>
+			<thead>
+				<tr>
+					<th>Produit</th>
+					<th>Quantité disponible</th>
+					<th>Quantité vendu</th>
+					<th>Total</th>
+					<th>Credit</th>
+				</tr>
+			</thead>
+			<tbody id="ventes">
+				
+			</tbody>
+		</table>
+	</div>
+	<hr>
+	<div >
+		<h4>Historique des ventes</h4>
+		<table>
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Produit</th>
+					<th>Quantité Vendu</th>
+					<th>Réduction (Unitaire)</th>
+					<th>Etat de payement</th>
+					<th>Total</th>
+				</tr>
+			</thead>
+			<tbody id="history">
+				
+			</tbody>
+		</table>
+	</div>
+	<hr>
+	<div >
+		<h4>Ventes non payé</h4>
+		<table>
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Produit</th>
+					<th>Quantité Vendu</th>
+					<th>Total</th>
+				</tr>
+			</thead>
+			<tbody id="ventes_non_paye">
+				
+			</tbody>
+		</table>
+	</div>
+	<hr>
+	<div >
+		<h4>Employés</h4>
+		<table>
+			<thead>
+				<tr>
+					<th>Nom</th>
+					<th>N° ventes</th>
+					<th>N° absence</th>
+					<th>Total argent</th>
+				</tr>
+			</thead>
+			<tbody id="employe">
+				
+			</tbody>
+		</table>
+	</div>
+</div>
+<script type="text/javascript">
+	div=[false,false,false,false];
+
+	$('#ventes').ready(function () {
+		$.ajax({
+			url:"{% url 'stat_prod_list' %}",
+			type:'POST',
+			data:{print:'true',csrfmiddlewaretoken : '{{csrf_token}}'},
+			success:function (res) {
+				if (res != 'Error') {
+					$('#ventes').html(res);
+					div[0]=true;
+				}
+			}
+		});
+	});
+	$('#history').ready(function () {
+		$.ajax({
+			url:"{% url 'stat_hist_list' %}",
+			type: 'POST',
+			data: {csrfmiddlewaretoken: '{{csrf_token}}' },
+			success:function (res) {
+				if (res != 'Error') {
+					hist_html='';
+					for (var i = 0; i < res['hist_list'].length; i++) {
+						hist=res['hist_list'][i];
+						if(hist['pred']==null)pred='/';else pred='-'+hist['pred'];
+						if(hist['etat']==0)etat='Non paye';else etat='Paye';
+						hist_html+='<tr>'; 
+						hist_html+='<td>'+hist['date']+'</td><td>'+hist['prod']+'</td><td>'+hist['qte']+'</td><td>'+pred+'</td><td>'+etat+'</td><td>'+hist['money']+'</td>';
+						hist_html+='</tr>';
+					}
+					$('#history').html(hist_html);
+					div[1]=true;
+				}else{
+					alert('erreur');
+				}
+			}
+		});
+	});
+	$('#ventes_non_paye').ready(function () {
+		$.ajax({
+			url:"{% url 'stat_ventes_non_paye'%}",
+			type:'POST',
+			data:{print:'true',csrfmiddlewaretoken : '{{csrf_token}}'},
+			success:function (res) {
+				if (res != 'Error') {
+					$('#ventes_non_paye').html(res);
+					div[2]=true;
+
+				}
+			}
+		});
+	});
+	$('#employe').ready(function () {
+		$.ajax({
+			url:"{% url 'stat_employe_list' %}",
+			type:'POST',
+			data:{print:'true',csrfmiddlewaretoken : '{{csrf_token}}'},
+			success:function (res) {
+				if (res != 'Error') {
+					$('#employe').html(res);
+					div[3]=true;
+				}
+			}
+		});
+	});
+	function printer() {
+		if (div.includes(false)) {
+			setTimeout(function () {
+		    	printer();
+			},500);
+		}else{
+			window.print();
+		}
+	}
+	printer();
+</script>
+{% endblock %}

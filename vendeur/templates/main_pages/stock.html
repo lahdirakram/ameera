@@ -1,0 +1,34 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block title %}| Stock{% endblock %}
+{% block activeSto %}active{% endblock%}
+{% block content%}
+<div class="container">
+	<form method="POST"  class="col-lg-6 col-sm-12" style="padding: 20px;margin: auto;">
+		{% csrf_token %}
+		<div class="form-group">
+			<label for="vendeur_id">ID du vendeur(se) :</label>
+			<input class="form-control " type="text" name="vendeur_id" id="vendeur_id"  value="{{user.vend_code}}" >
+			<small class="text-muted">veuiller entre votre code vendeur</small>
+		</div>
+		<div class="form-group">
+			<label for="prod_id">Produit a stocké :</label>
+			<select class="form-control" name="prod_id" id="prod_id" autofocus>
+				{% for prod in prod_list %}
+				<option value="{{prod.id}}">{{prod.name}}</option>				
+				{% endfor %}
+			</select>
+			<small class="text-muted">veuiller choisir le produit stocké</small>
+		</div>
+		<div class="form-group">
+			<label for="qte_id">Quantité stocké :</label>
+			<input class="form-control " type="number" name="qte" id="qte">
+			<small class="text-muted">veuiller entre la quantité stocké</small>
+		</div>
+		<div class="form-group">
+			<input type="submit" name="valide" value="Valider" class="form-control " style="max-width: 100%">
+		</div>
+	</form>
+	
+</div>
+{% endblock %}

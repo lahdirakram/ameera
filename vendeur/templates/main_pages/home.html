@@ -1,0 +1,72 @@
+{% extends 'layout/head.html' %}
+{% load static %}
+{% block body %}
+<body>
+	<div style="width: 100%; position: fixed;top: 0;z-index: -1;">
+		<img src="{% static  'img/background.jpg' %}" style="max-height: 100vh">
+	</div>
+	<nav  class="navbar sticky-top navbar-expand-lg navbar-inverse navbar-light bg-light" style="box-shadow: 0 5px 10px 0 #0000000f;">
+		<div class="container">
+			<a class="navbar-brand" href="/"><img src="{% static 'logo2.png' %} " width="150"></a>    
+			<ul class="navbar-nav ml-auto mt-2 mt-lg-0" >
+				<!-- <li class="nav-item"><a href="#" class="nav-link" id="connect">Connect</a></li> -->
+			</ul>
+		</div>
+	</nav>
+	<div class="container" style="position: relative;">
+		<div id="welcom_text" class="main col-sm-10 col-md-5" style="text-align: center;padding: 10px;">
+			<h3 style="font-family: 'Montserrat', sans-serif;"></h3>
+			<p style="font-size: 20px; margin-bottom: 40px;">Discover our organic, luxurious skincare range sourced from Morocco’s Atlas Mountains and Argan trees and inspired by ancient Moroccan beauty secrets.</p>
+			<a href="#" class="btn btn-outline-dark">Learn more</a>
+			<a href="#" class="btn btn-dark"  id="connect">Connect</a>
+		</div>
+		<div id="connect_form" class="main col-sm-10 col-md-5">
+			<div class="container">
+			<form method="POST" style="padding: 20px;">
+				{% csrf_token %}
+				<div class="has-errors text-danger small">
+				{{form.non_field_errors}}
+				</div>
+					
+                <div class="form-group">
+				    {{ form.user_name.label_tag }}
+				    {{ form.user_name }}
+				    <div class="has-errors text-danger small">
+	                {{ form.user_name.errors }}
+	            	</div>
+                </div>
+                <div class="form-group">
+				    {{ form.password.label_tag }}
+				    {{ form.password }}
+				    <div class="has-errors text-danger small">
+	                {{ form.password.errors }}
+	            	</div>
+                </div>
+				<div class="form-group">
+					<input class="form-control" type="submit" value="Connecter">
+				</div>
+			</form>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$('#connect_form').hide();
+		//$('#welcom_text').hide();
+		var form=false;
+		$('#connect').click(function () {
+			if (form == false) {
+				$('#welcom_text').fadeOut("slow",function () {
+					$('#connect_form').fadeIn("slow");
+					form=true;
+				});
+			}else{
+				$('#connect_form').fadeOut("slow",function () {
+					$('#welcom_text').fadeIn("slow");
+					form=false;
+				});
+					
+			}
+		})
+	</script>
+</body>
+{% endblock %}

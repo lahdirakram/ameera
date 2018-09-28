@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ameera London {% block title %}{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" href="{% static 'favicon.png' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'Bootstrap/bootstrap.css' %}">
+  <link href="{% static '/css/fontawesome-all.css' %}" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+
+
+
+  <style type="text/css">
+    
+    .navbar{
+      font-family: 'Ubuntu', Helvetica, Arial, sans-serif;;
+    }
+  	.product-image img{
+  		padding: 20px;
+  		width: 100%;
+  	}
+    .footer-item{
+      padding: 5px;
+    }
+    .footer-item p{
+      margin: 0;
+      padding-left: 15px;
+      display: inline-block;
+    }
+    .footer-item li{
+      padding: 10px;
+    }
+    .main{
+      margin: 20% auto;
+      padding: 0;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 9px 1px #d8d8d8a1;
+    }
+    @media(min-width: 768px){
+        .main{
+          position: absolute!important;
+          right: 10px;
+          margin-top: 10vh!important; 
+        }
+      }
+    .stat_table_container{
+      padding: 20px;
+      border: 1px solid #dee2e6;
+      margin: 10px 0;
+    }
+    .svg_nav img{
+    width: 40px;
+    height: auto;
+    filter: invert(70%);
+    }
+    .active_svg img{
+    filter: invert(100%)!important;
+    }
+    /* width */
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888; 
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+    }
+  </style>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript" src="{% static 'Highcharts/highcharts.js' %}"></script>
+  <script type="text/javascript" src="{% static 'Highcharts/offline-exporting.js' %}"></script>
+  <script type="text/javascript" src="{% static 'Highcharts/exporting.js' %}"></script>
+  <script type="text/javascript" src="{% static 'functions.js' %}"></script>
+</head>
+{% block body %}{% endblock %}
+</html>
