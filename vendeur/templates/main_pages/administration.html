@@ -30,7 +30,12 @@
 					<tr>
 						<td>{{p.code}}</td>
 						<td>{{p.nom}}</td>
-						<td><a href="{{p.image}}"  target="_blank">Click</a></td>
+						<td style="position: relative;" id="{{p.code}}hover">
+							<img style="max-width: 30px;max-height: 30px;" src="{{p.image}}">
+							<div id="{{p.code}}" style="position: absolute;top: -50px;left: -49px;z-index: 5;">
+								<img style="max-width: 150px;max-height: 150px;" src="{{p.image}}">
+							</div>
+						</td>
 						<td>{{p.qte}}</td>
 						<td>{{p.prix}}</td>
 						<td style="text-align: right;">
@@ -41,6 +46,15 @@
 						</td>
 
 					</tr>
+					<script type="text/javascript">
+						$('#{{p.code}}').hide();
+						$('#{{p.code}}hover').hover(function () {
+							$('#{{p.code}}').show();
+						});
+						$('#{{p.code}}hover').mouseleave(function () {
+							$('#{{p.code}}').hide();
+						});
+					</script>
 				{% endfor %}
 			</tbody>
 		</table>
