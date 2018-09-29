@@ -17,9 +17,7 @@ urlpatterns = [
 	re_path(r'stat_employe_list/$', views.stat_employe_list, name="stat_employe_list"),
 	re_path(r'stat_ventes_non_paye/$', views.stat_ventes_non_paye, name="stat_ventes_non_paye"),
 	re_path(r'stat_graph/$', views.stat_graph, name="stat_graph"),
-
-	
-	
+	re_path(r'stat_testeur/$',views.stat_testeur,name="stat_testeur" ),
 
 	re_path(r'stat/print$', views.print_stat, name="print_stat"),
 

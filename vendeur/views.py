@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from vendeur.models import Product,history,vendeur,user_bis
+from vendeur.models import Product,history,vendeur,user_bis,prod_test
 from django.http import HttpResponse
 import datetime
 from django.http import JsonResponse
@@ -301,6 +301,20 @@ def stat_graph(request):
 		money_list.append(money_one)
 	money_graph_series=[{'name': 'Money','data': money_list }]
 	return JsonResponse({'money_graph_series':money_graph_series,'ventes_graph_series':ventes_graph_series,'d_d':str(date_deb),'d_f':str(date_fin)})
+def stat_testeur(request):
+	
+	user = check_in(request)
+	if  user == None:
+		return HttpResponse('Acces non autorisé')
+
+	testeurList=[]
+	if request.method == "POST":
+		for testeur in prod_test.objects.all():
+			test = {'date':testeur.date,'prod':testeur.prod.prod_name,'qte':testeur.qte}
+			testeurList.append(test)
+
+	return JsonResponse({'testeurList':testeurList})
+		
 
 ############################" PRINT"
 def print_stat(request):

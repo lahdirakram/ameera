@@ -39,14 +39,19 @@ class vendeur(models.Model):
 	def __str__(self):
 		return self.vend_name
 
-class test(models.Model):
-
-	aa=models.TextField()
-
 class user_bis(models.Model):
 	
 	user=models.ForeignKey(vendeur,on_delete=models.CASCADE,null=False)
 	user_coockie_hash=models.TextField(default="")
+
+class prod_test(models.Model):
+	
+	prod=models.ForeignKey(Product,on_delete=models.CASCADE,null=False)
+	date=models.DateField()
+	qte=models.IntegerField(default=1)
+
+	def __str__(self):
+		return self.prod.prod_name
 		
 		
 		

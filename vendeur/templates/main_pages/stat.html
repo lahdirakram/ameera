@@ -67,12 +67,6 @@
 		text-align: center;
 	}
 </style>
-<!-- <div class="row" style="margin: 0;"> -->
-<!-- <div class="col-1" >
-	<ul class="outil list-unstyled m-0" >
-		<li><a class="btn btn-outline-dark btn-sm" href="{% url 'print_stat' %}" target="_blank"><i class="fas fa-print fa-3x"></i></a><p class="m-0">Imprimer</p></li>
-	</ul>
-</div> -->
 <div class="container">
 	<div id="table_des_ventes" class="stat_table_container">
 		<h4>Table des ventes</h4>
@@ -180,6 +174,22 @@
 			<tfooter>
 				
 			</tfooter>
+		</table>
+		</div>
+	</div>
+	<div id="testeur" class="stat_table_container">
+		<h4>Testeur</h4>
+		<div style="overflow: auto; max-height: 500px;">
+		<table class="table table-responsive-sm ">
+			<thead>
+				<tr>
+					<th>Produit</th>
+					<th>Date d'ouverture</th>
+					<th>Quantite</th>
+				</tr>
+			</thead>
+			<tbody id="stat_testeur_list">
+			</tbody>
 		</table>
 		</div>
 	</div>
@@ -340,6 +350,26 @@
 			success:function (res) {
 				if (res != 'Error') {
 					$('#stat_ventes_non_paye').html(res);
+				}
+			}
+		});
+	});
+	//---------- TESTEUR
+	$('#testeur').ready(function () {
+		$.ajax({
+			url:"{% url 'stat_testeur'%}",
+			type:'POST',
+			data:{csrfmiddlewaretoken : '{{csrf_token}}'},
+			success:function (res) {
+				res=res['testeurList'];
+				if (res != null) {
+					var html = '';
+					for (var i = 0; i < res.length; i++) {
+						html+='<tr>';
+						html+='<td>'+res[i]['date']+'</td>'+'<td>'+res[i]['prod']+'</td>'+'<td>'+res[i]['qte']+'</td>';
+						html+='</tr>';
+					}
+					$('#stat_testeur_list').html(html);
 				}
 			}
 		});
