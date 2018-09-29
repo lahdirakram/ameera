@@ -48,7 +48,7 @@ def vendre(request):
 		prod_list.append(prod_one)
 
 	if request.method=="POST":
-		vendeur_id=request.POST.get('vendeur_id')
+		# vendeur_id=request.POST.get('vendeur_id')
 		prod_id=request.POST.get('prod_id')
 		qte=request.POST.get('qte')
 		pu=request.POST.get('pu')
@@ -61,32 +61,31 @@ def vendre(request):
 		else:
 			h_p_s=prod.prod_PU-int(pu)
 			price=int(pu)
-		try:
-			vend =vendeur.objects.get(vend_code=vendeur_id)
-		except:
-			vend=None
+		# try:
+		# 	vend =vendeur.objects.get(vend_code=vendeur_id)
+		# except:
+		# 	vend=None
 
-		if vend != None:
-			a=history.objects.filter(hist_date=datetime.date.today(),hist_prod_id_id=prod_id,hist_prix_sell=h_p_s,hist_etat=int(etat))
-			if not a.exists():
-				history.objects.create(hist_date=datetime.date.today(),hist_nbr_sell=int(qte),hist_money=price*int(qte),hist_prod_id=prod,hist_prix_sell=h_p_s,hist_etat=int(etat))
-				history.objects.filter(hist_date=datetime.date.today(),hist_prod_id_id=0).delete()
-			else:
-				b=a[0]
-				b.hist_nbr_sell =b.hist_nbr_sell + int(qte)
-				b.hist_money += int(qte)*price
-				b.save()
-
-			vend.vend_sells=vend.vend_sells+int(qte)
-			vend.vend_money=vend.vend_money+price*int(qte)
-			vend.save()
-
-			prod.prod_Q=prod.prod_Q-int(qte)
-			prod.prod_sell=prod.prod_sell+int(qte)
-			prod.save()
+		
+		a=history.objects.filter(hist_date=datetime.date.today(),hist_prod_id_id=prod_id,hist_prix_sell=h_p_s,hist_etat=int(etat))
+		if not a.exists():
+			history.objects.create(hist_date=datetime.date.today(),hist_nbr_sell=int(qte),hist_money=price*int(qte),hist_prod_id=prod,hist_prix_sell=h_p_s,hist_etat=int(etat))
+			history.objects.filter(hist_date=datetime.date.today(),hist_prod_id_id=0).delete()
 		else:
-			print('vend error :'+vendeur_id)
+			b=a[0]
+			b.hist_nbr_sell =b.hist_nbr_sell + int(qte)
+			b.hist_money += int(qte)*price
+			b.save()
 
+		user.vend_sells=user.vend_sells+int(qte)
+		user.vend_money=user.vend_money+price*int(qte)
+		user.save()
+
+		prod.prod_Q=prod.prod_Q-int(qte)
+		prod.prod_sell=prod.prod_sell+int(qte)
+		prod.save()
+		
+		return redirect('action')
 
 	return render(request,'main_pages/vendre.html',{'prod_list':prod_list,'user':user})
 
@@ -101,17 +100,47 @@ def stock(request):
 		prod_list.append(prod_one)
 
 	if request.method == "POST":
-		vendeur_id=request.POST.get('vendeur_id')
+		# vendeur_id=request.POST.get('vendeur_id')
 		prod_id=request.POST.get('prod_id')
 		qte=request.POST.get('qte')
-		if vendeur.objects.filter(vend_code=vendeur_id).exists():
-			prod= Product.objects.get(id=int(prod_id))
-			prod.prod_Q+=int(qte)
-			prod.save()
-		else:
-			print('vend error :'+vendeur_id)
+		#if vendeur.objects.filter(vend_code=vendeur_id).exists():
+		prod= Product.objects.get(id=int(prod_id))
+		prod.prod_Q+=int(qte)
+		prod.save()
+		return redirect('action')
 
+		
 	return render(request,'main_pages/stock.html',{'prod_list':prod_list,'user':user})
+def testeur_in(request):
+	user = check_in(request)
+	if  user == None:
+		return redirect('home')
+
+	prod_list=[]
+	for prod in Product.objects.raw("select * from vendeur_product"):
+		prod_one={'id':prod.id,'name':prod.prod_name,'image':prod.prod_image,'pu':prod.prod_PU,'qte':prod.prod_Q,'sell':prod.prod_sell}
+		prod_list.append(prod_one)
+	if request.method == "POST":
+		prod_id=request.POST.get('prod_id')
+		qte=request.POST.get('qte')
+
+		prod= Product.objects.get(id=int(prod_id))
+
+		prod_test.objects.create(prod=prod,date=datetime.date.today(),qte=int(qte))
+		
+		prod.prod_Q-=int(qte)
+		prod.save()	
+		return redirect('action')
+		
+
+	return render(request,'main_pages/testeur.html',{'prod_list':prod_list,'user':user})
+
+
+def action(request):
+	user = check_in(request)
+	if  user == None:
+		return redirect('home')
+	return render(request,'main_pages/action.html',{'user':user})
 def home(request):
 
 	if request.method == "POST":
@@ -309,8 +338,8 @@ def stat_testeur(request):
 
 	testeurList=[]
 	if request.method == "POST":
-		for testeur in prod_test.objects.all():
-			test = {'date':testeur.date,'prod':testeur.prod.prod_name,'qte':testeur.qte}
+		for t in prod_test.objects.all():
+			test = {'date':t.date.strftime('%d %B %Y'),'prod':t.prod.prod_name,'qte':t.qte}
 			testeurList.append(test)
 
 	return JsonResponse({'testeurList':testeurList})

@@ -15,8 +15,9 @@
             <li class="nav-item {% block activeP %}{% endblock%}"><a href="{% url 'produit' %}" class="nav-link"> Produits </a></li>
             <li class="nav-item {% block activeS %}{% endblock%}"><a href="{% url 'stat' %}" class="nav-link"> Statistiques </a></li>
             {% if user.vend_admin == 1 %}
-            <li class="nav-item {% block activeV %}{% endblock%}"><a href="{% url 'vendre' %}" class="nav-link"> Vendre </a></li>
-            <li class="nav-item {% block activeSto %}{% endblock%}"><a href="{% url 'stock' %}" class="nav-link"> Stock </a></li>
+            <!-- <li class="nav-item {% block activeV %}{% endblock%}"><a href="{% url 'vendre' %}" class="nav-link"> Vendre </a></li>
+            <li class="nav-item {% block activeSto %}{% endblock%}"><a href="{% url 'stock' %}" class="nav-link"> Stock </a></li> -->
+            <li class="nav-item {% block activeA %}{% endblock%}"><a href="{% url 'action' %}" class="nav-link"> Actions</a></li>
             <li class="nav-item {% block activeAdm %}{% endblock%}"><a href="{% url 'administration' %}" class="nav-link"> Administration </a></li>
             {% endif %}
           </ul>

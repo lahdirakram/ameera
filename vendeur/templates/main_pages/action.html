@@ -1,0 +1,52 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block title %}| Action{% endblock %}
+{% block activeA %}active{% endblock%}
+{% block content%}
+<div class="container">
+	<div class="col-lg-6 col-sm-12" style="margin: 20px auto;">
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link active" id="vendre-tab" data-toggle="tab" href="#vendre" role="tab" aria-controls="vendre" aria-selected="true" >Vendre</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="stock-tab" data-toggle="tab" href="#stock" role="tab" aria-controls="stock" aria-selected="false">Stock</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="testeur-tab" data-toggle="tab" href="#testeur" role="tab" aria-controls="testeur" aria-selected="false">Testeur</a>
+			</li>
+		</ul>
+		<div class="tab-content" id="myTabContent" style="border: 1px solid #dee2e6;border-top: none;">
+			<div id="vendre" class="tab-pane fade show active" role="tabpanel" aria-labelledby="vendre-tab"></div>
+			<div id="stock" class="tab-pane fade"role="tabpanel" aria-labelledby="stock-tab"></div>
+			<div id="testeur" class="tab-pane fade"role="tabpanel" aria-labelledby="testeur-tab"></div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$('#vendre').ready(function () {
+		$.ajax({
+			url:"{% url 'vendre' %}",
+			success:function (html) {
+				$('#vendre').html(html);
+			}
+		});
+	});
+	$('#stock').ready(function () {
+		$.ajax({
+			url:"{% url 'stock' %}",
+			success:function (html) {
+				$('#stock').html(html);
+			}
+		});
+	});
+	$('#testeur').ready(function () {
+		$.ajax({
+			url:"{% url 'testeur' %}",
+			success:function (html) {
+				$('#testeur').html(html);
+			}
+		});
+	});
+</script>
+{% endblock %}

@@ -1,19 +1,19 @@
 {% load static %}
-<form action="{% url 'stock' %}" method="POST"  style="padding: 20px;margin: auto;">
+<form action="{% url 'testeur' %}" method="POST"   style="padding: 20px;margin: auto;">
 	{% csrf_token %}
 	<div class="form-group">
-		<label for="prod_id">Produit a stocké :</label>
+		<label for="prod_id">Produit :</label>
 		<select class="form-control" name="prod_id" id="prod_id" autofocus>
 			{% for prod in prod_list %}
 			<option value="{{prod.id}}">{{prod.name}}</option>				
 			{% endfor %}
 		</select>
-		<small class="text-muted">veuiller choisir le produit stocké</small>
+		<small class="text-muted">veuiller choisir le produit </small>
 	</div>
 	<div class="form-group">
-		<label for="qte_id">Quantité stocké :</label>
+		<label for="qte_id">Quantité :</label>
 		<input class="form-control " type="number" name="qte" id="qte" value="1">
-		<small class="text-muted">veuiller entre la quantité stocké</small>
+		<small class="text-muted">veuiller entre la quantité </small>
 	</div>
 	<div class="form-group">
 		<input type="submit" name="valide" value="Valider" class="form-control " style="max-width: 100%">
