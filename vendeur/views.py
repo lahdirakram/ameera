@@ -142,7 +142,10 @@ def action(request):
 		return redirect('home')
 	return render(request,'main_pages/action.html',{'user':user})
 def home(request):
-
+	a=history.objects.filter(hist_date=datetime.date.today())
+	if(not a.exists()):
+		history.objects.create(hist_date=datetime.date.today(),hist_nbr_sell=0,hist_money=0,hist_prod_id=Product.objects.get(id=0),hist_prix_sell=None,hist_etat=1)
+			
 	if request.method == "POST":
 		form=Connect(request.POST)
 		if form.is_valid():
