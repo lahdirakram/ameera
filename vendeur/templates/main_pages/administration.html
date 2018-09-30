@@ -10,17 +10,17 @@
 				<h4>Table des ventes</h4>
 			</div>
 			<div class="col-4" style="text-align:right; ">
-				<button class="btn btn-outline-dark btn-sm "style="margin-bottom: 10px; ">Nouveau<br class="d-md-none"> produit</button>
+				<button class="btn btn-outline-dark btn-sm "style="margin-bottom: 10px; ">Nouveau produit</button>
 			</div>
 		</div>
-				
+
 		<table class="table table-responsive-sm ">
 			<thead>
 				<tr>
 					<th>#Code</th>
 					<th>Produit</th>
 					<th>Image</th>
-					<th>Quantité disponible</th>
+					<th>Qte <br class="d-md-none" > dispo</th>
 					<th>Prix (DZD)</th>
 					<th></th>
 				</tr>
@@ -58,17 +58,17 @@
 				{% endfor %}
 			</tbody>
 		</table>
-	</div>		
+	</div>
 	<div id="employe" class="stat_table_container">
 		<div class="row">
 			<div class="col-8">
 				<h4>Employés</h4>
 			</div>
 			<div class="col-4" style="text-align:right; ">
-				<button class="btn btn-outline-dark btn-sm "style="margin-bottom: 10px; ">Nouveau<br class="d-md-none"> Employe</button>
+				<button class="btn btn-outline-dark btn-sm "style="margin-bottom: 10px; ">Nouveau Employe</button>
 			</div>
 		</div>
-			
+
 		<div style="overflow: auto; max-height: 500px;">
 		<table class="table table-responsive-sm ">
 			<thead>
@@ -87,9 +87,11 @@
 						<td>{{e.nom}}</td>
 						<td>{{e.username}}</td>
 						<td>{{e.type}}</td>
-						<td style="text-align: right;">
-							<button class="btn btn-outline-dark btn-sm">Modifier</button>
-							<button class="btn btn-outline-dark btn-sm">Supprimer</button>
+						<td style="text-align: right;padding-left:0;padding-right:0;">
+						    <div class="row ml-0 mr-0" >
+							<div class="col-md-6 col-sm-12"><button class="btn btn-outline-dark btn-sm" style="width:100%;margin-bottom:5px;">Modifier</button></div>
+							<div class="col-md-6 col-sm-12"><button class="btn btn-outline-dark btn-sm" style="width:100%;">Supprimer</button></div>
+						    </div>
 						</td>
 					</tr>
 				{% endfor%}
