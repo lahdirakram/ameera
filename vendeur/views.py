@@ -66,7 +66,7 @@ def vendre(request):
 		# except:
 		# 	vend=None
 
-		
+
 		a=history.objects.filter(hist_date=datetime.date.today(),hist_prod_id_id=prod_id,hist_prix_sell=h_p_s,hist_etat=int(etat))
 		if not a.exists():
 			history.objects.create(hist_date=datetime.date.today(),hist_nbr_sell=int(qte),hist_money=price*int(qte),hist_prod_id=prod,hist_prix_sell=h_p_s,hist_etat=int(etat))
@@ -84,7 +84,7 @@ def vendre(request):
 		prod.prod_Q=prod.prod_Q-int(qte)
 		prod.prod_sell=prod.prod_sell+int(qte)
 		prod.save()
-		
+
 		return redirect('action')
 
 	return render(request,'main_pages/vendre.html',{'prod_list':prod_list,'user':user})
@@ -109,7 +109,7 @@ def stock(request):
 		prod.save()
 		return redirect('action')
 
-		
+
 	return render(request,'main_pages/stock.html',{'prod_list':prod_list,'user':user})
 def testeur_in(request):
 	user = check_in(request)
@@ -127,11 +127,11 @@ def testeur_in(request):
 		prod= Product.objects.get(id=int(prod_id))
 
 		prod_test.objects.create(prod=prod,date=datetime.date.today(),qte=int(qte))
-		
+
 		prod.prod_Q-=int(qte)
-		prod.save()	
+		prod.save()
 		return redirect('action')
-		
+
 
 	return render(request,'main_pages/testeur.html',{'prod_list':prod_list,'user':user})
 
@@ -142,7 +142,6 @@ def action(request):
 		return redirect('home')
 	return render(request,'main_pages/action.html',{'user':user})
 def home(request):
-
 	if request.method == "POST":
 		form=Connect(request.POST)
 		if form.is_valid():
@@ -331,7 +330,7 @@ def stat_graph(request):
 	money_graph_series=[{'name': 'Money','data': money_list }]
 	return JsonResponse({'money_graph_series':money_graph_series,'ventes_graph_series':ventes_graph_series,'d_d':str(date_deb),'d_f':str(date_fin)})
 def stat_testeur(request):
-	
+
 	user = check_in(request)
 	if  user == None:
 		return HttpResponse('Acces non autorisé')
@@ -343,7 +342,7 @@ def stat_testeur(request):
 			testeurList.append(test)
 
 	return JsonResponse({'testeurList':testeurList})
-		
+
 
 ############################" PRINT"
 def print_stat(request):
