@@ -10,7 +10,7 @@
 				<h4>Table des ventes</h4>
 			</div>
 			<div class="col-4" style="text-align:right; ">
-				<button class="btn btn-outline-dark btn-sm "style="margin-bottom: 10px; ">Nouveau produit</button>
+				<button id="newprod" class="btn btn-outline-dark btn-sm "style="margin-bottom: 10px; " data-toggle="modal" data-target="#exampleModal">Nouveau produit</button>
 			</div>
 		</div>
 
@@ -40,7 +40,7 @@
 						<td>{{p.prix}}</td>
 						<td style="text-align: right;">
 							{% if p.sell == 0 %}
-								<button class="btn btn-outline-dark btn-sm">Supprimer</button>
+								<a href="{% url 'supprimerproduit' %}?id={{p.code}}" class="btn btn-outline-dark btn-sm">Supprimer</a>
 							{% endif %}
 							<button class="btn btn-outline-dark btn-sm">Modifier</button>
 						</td>
@@ -100,4 +100,64 @@
 		</div>
 	</div>
 </div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog " role="document"  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<form action="{% url 'ajoutproduit' %}" method="POST" enctype="multipart/form-data">
+      		{% csrf_token %}
+      		<div class="form-group">
+				<input class="form-control " type="text" name="prod_name" placeholder="Nom du produit">
+			</div>
+			<div class="form-group">
+				<input class="form-control " type="number" name="prod_PU" placeholder="Prix du produit">
+			</div>
+			<div class="form-group">
+				<input class="form-control " type="number" name="prod_Q" placeholder="qte">
+			</div>
+			<div class="form-group">
+				<input class="form-control " type="number" name="prod_sell" placeholder="qte vendu" value="0" hidden>
+			</div>
+			<div class="form-group">
+				<input class="form-control " type="file" name="prod_image" >
+			</div>
+			<div class="form-group">
+				<input type="submit" name="valide" value="Valider" class="form-control " style="max-width: 100%">
+			</div>
+      	</form>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+	var newprodid=0;
+	$('#newprod').click(function () {
+		newprodid++;
+		url="{% url 'ajoutproduit' %}";
+		var addprodhtml=' <tr id="'+newprodid+'">';
+		addprodhtml+='<form action="'+url+'" method="POST" enctype="multipart/form-data">';
+		addprodhtml+='<input class="form-control form-control-sm" type="text" name="prod_name" placeholder="Nom du produit">';
+		addprodhtml+='<input class="form-control form-control-sm" type="file" name="prod_image" >';
+		addprodhtml+='<input class="form-control form-control-sm" type="number" name="prod_Q" placeholder="qte">';
+		addprodhtml+='<input class="form-control form-control-sm" type="number" name="prod_PU" placeholder="Prix du produit">';
+		addprodhtml+='<input class="form-control form-control-sm" type="submit" name="valide" id="submitt_newprod" style="max-width: 100%">';
+		addprodhtml+='</form></tr>';
+
+		currenthtml=$('#prod_list_table').html();
+		$('#prod_list_table').html(currenthtml+addprodhtml);
+	});
+	// $('#submitt_newprod').click(function () {
+	// 	postdata={prod_name:,prod_image:,};
+		
+	// });
+
+</script>
 {% endblock %}

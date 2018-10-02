@@ -10,6 +10,38 @@ from .functions import Hash
 
 # Create your views here.
 locale.setlocale(locale.LC_ALL, 'fr_FR.utf8')
+def ajoutproduit(request):
+	user = check_in(request)
+	if  user == None:
+		return redirect('home')
+
+	if request.method == 'POST':
+		form = ProdForm(request.POST, request.FILES)
+		if form.is_valid():
+			form.save()
+			newprod=Product.objects.last()
+			#return 	JsonResponse({'id':newprod.id,'name':newprod.prod_name,'image':newprod.prod_image.url,'prix':newprod.prod_PU,'qte':newprod.prod_Q,'sell':newprod.prod_sell})
+	#return JsonResponse({'Error':'erroné'})	
+	return redirect('administration')
+def supprimerproduit(request):
+	user = check_in(request)
+	if  user == None:
+		return redirect('home')
+	if request.method=="GET":
+		try:
+			p=Product.objects.get(id=int(request.GET.get('id')))
+		except :
+			p=None
+
+		if p != None:
+			if p.prod_sell == 0 :
+				p.delete()
+	return redirect('administration')
+def modifierproduit(request):
+	user = check_in(request)
+	if  user == None:
+		return redirect('home')
+	return redirect('administration')
 
 def produit(request):
 	user = check_in(request)
@@ -353,3 +385,7 @@ def print_stat(request):
 	if  user == None:
 		return HttpResponse('Error')
 	return render(request,'print_files/stat.html')
+
+
+
+
