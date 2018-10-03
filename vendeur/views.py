@@ -321,7 +321,7 @@ def stat_graph(request):
 		if prod.id != 0:
 			prod_obj={'name':prod.prod_name,'data':[]}
 			sell_list=[]
-			for statis in history.objects.raw("select id,hist_date ,hist_prod_id_id,hist_nbr_sell as nbr from vendeur_history where hist_date >= '"+str(date_deb)+"' and hist_date <= '"+str(date_fin)+"' and hist_prod_id_id ="+str(prod.id)+" ORDER BY hist_prod_id_id,hist_date  asc"):
+			for statis in history.objects.raw("select id,hist_date ,hist_prod_id_id,sum(hist_nbr_sell) as nbr from vendeur_history where hist_date >= '"+str(date_deb)+"' and hist_date <= '"+str(date_fin)+"' and hist_prod_id_id ="+str(prod.id)+" group by hist_date ORDER BY hist_date  asc"):
 				sell_one=[[statis.hist_date.strftime("%d"),statis.hist_date.strftime("%m"),statis.hist_date.strftime("%y")],statis.nbr]
 				sell_list.append(sell_one)
 			prod_obj['data']=sell_list
