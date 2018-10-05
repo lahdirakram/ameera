@@ -95,7 +95,7 @@
 				</tr>
 			</tfooter>
 		</table>
-	</div>								
+	</div>
 	<div id="historique_des_ventes" class="stat_table_container" >
 		<div class="row">
 			<div class="col-9">
@@ -126,9 +126,9 @@
 				<tr>
 					<th>Date</th>
 					<th>Produit</th>
-					<th>Quantité Vendu</th>
-					<th>Réduction (Unitaire)</th>
-					<th>Etat de payement</th>
+					<th><span class="d-none d-md-block">Quantité Vendu</span><span class="d-md-none">Qte</span></th>
+					<th>Réduction <span class="d-none d-md-block">(Unitaire)</span></th>
+					<th>Etat <span class="d-none d-md-block">de payement</span> </th>
 					<th>Total</th>
 				</tr>
 			</thead>
@@ -137,8 +137,8 @@
 		</table>
 		</div>
 	</div>
-	
-	<script type="text/javascript">	
+
+	<script type="text/javascript">
 		function update_history(id) {
 			$.ajax({
 				url:"{% url 'update_history' %}",
@@ -169,10 +169,10 @@
 				</tr>
 			</thead>
 			<tbody id="stat_ventes_non_paye" onchange="$('.marquer_come').css('min-width',$('.marquer_come').width())">
-				
+
 			</tbody>
 			<tfooter>
-				
+
 			</tfooter>
 		</table>
 		</div>
@@ -218,7 +218,7 @@
 		    <a class="nav-link active" id="ventes-tab" data-toggle="tab" href="#ventes" role="tab" aria-controls="ventes" aria-selected="true" onclick="setTimeout(function () {ventes.reflow();},500);">Ventes</a>
 		  </li>
 		  <li class="nav-item">
-		    <a class="nav-link" id="money-tab" data-toggle="tab" href="#money" role="tab" aria-controls="money" aria-selected="false" 
+		    <a class="nav-link" id="money-tab" data-toggle="tab" href="#money" role="tab" aria-controls="money" aria-selected="false"
 		    onclick="setTimeout(function () {money.reflow();},500);">Money</a>
 		  </li>
 		</ul>
@@ -253,14 +253,14 @@
 					}
 					$('#graph_valider').click(function () {
 					  graph_form_on_off();
-					  chart_update($('#date-debut').val(),$('#date-fin').val());  
+					  chart_update($('#date-debut').val(),$('#date-fin').val());
 					});
 					$('#graph-opt-div').hide();
 					var graph_opt_div=false;
 				</script>
 		</div>
 		</div>
-		<div class="tab-content" id="myTabContent" 
+		<div class="tab-content" id="myTabContent"
 			style="border: 1px solid #dee2e6;border-top: none;">
 			<div id="ventes" class="tab-pane fade show active" role="tabpanel" aria-labelledby="ventes-tab"></div>
 			<div id="money" class="tab-pane fade"role="tabpanel" aria-labelledby="money-tab"></div>
@@ -326,7 +326,7 @@
 						hist=res['hist_list'][i];
 						if(hist['pred']==null)pred='/';else pred='-'+hist['pred'];
 						if(hist['etat']==0)etat='Non paye';else etat='Paye';
-						hist_html+='<tr>'; 
+						hist_html+='<tr>';
 						hist_html+='<td>'+hist['date']+'</td><td>'+hist['prod']+'</td><td>'+hist['qte']+'</td><td>'+pred+'</td><td>'+etat+'</td><td>'+hist['money']+'</td>';
 						hist_html+='</tr>';
 					}
@@ -393,7 +393,7 @@
 	$('#myTabContent').ready(chart_update(null,null));
 	function chart_update(date_deb,date_fin) {
 		if (date_deb == null )var d={csrfmiddlewaretoken : '{{csrf_token}}'};
-		else var d ={date_debut:date_deb,date_fin:date_fin,csrfmiddlewaretoken : '{{csrf_token}}'}; 
+		else var d ={date_debut:date_deb,date_fin:date_fin,csrfmiddlewaretoken : '{{csrf_token}}'};
 		$.ajax({
 			url:"{% url 'stat_graph' %}",
 			type:"POST",
@@ -427,6 +427,6 @@
 				}
 		});
 	}
-	
+
 </script>
 {% endblock %}
