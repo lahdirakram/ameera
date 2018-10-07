@@ -74,8 +74,8 @@
 			<thead>
 				<tr>
 					<th>Produit</th>
-					<th>Quantité disponible</th>
-					<th>Quantité vendu</th>
+					<th><span class="d-none d-md-block">Quantité disponible</span><span class="d-md-none">Qte<br>dispo</span></th>
+					<th><span class="d-none d-md-block">Quantité vendu</span><span class="d-md-none">Qte<br>vendu</span></th>
 					<th>Total</th>
 					<th>Credit</th>
 					<th>Etat</th>
@@ -127,7 +127,7 @@
 					<th>Date</th>
 					<th>Produit</th>
 					<th><span class="d-none d-md-block">Quantité Vendu</span><span class="d-md-none">Qte</span></th>
-					<th>Réduction <span class="d-none d-md-block">(Unitaire)</span></th>
+					<th><span class="d-none d-md-block">Réduction (Unitaire)</span><span class="d-md-none">Red</span></th>
 					<th>Etat <span class="d-none d-md-block">de payement</span> </th>
 					<th>Total</th>
 				</tr>
@@ -135,6 +135,9 @@
 			<tbody id="hist_list_table">
 			</tbody>
 		</table>
+		</div>
+		<div>
+            <p style="max-width:20%;margin-left:auto;margin-top:20px;font-weight: bold;text-align: right;" id="hist_total"></p>
 		</div>
 	</div>
 
@@ -327,12 +330,20 @@
 						if(hist['pred']==null)pred='/';else pred='-'+hist['pred'];
 						if(hist['etat']==0)etat='Non paye';else etat='Paye';
 						hist_html+='<tr>';
-						hist_html+='<td>'+hist['date']+'</td><td>'+hist['prod']+'</td><td>'+hist['qte']+'</td><td>'+pred+'</td><td>'+etat+'</td><td>'+hist['money']+'</td>';
+						hist_html+='<td>'+hist['date']+'</td><td>'+hist['prod']+'</td><td>'+hist['qte']+'</td><td>'+pred+'</td><td>'+etat+'</td><td class="hist_money">'+hist['money']+'</td>';
 						hist_html+='</tr>';
 					}
 					$('#hist_list_table').html(hist_html);
 					$('#hist_date_debut').val(res['date_deb']);
 					$('#hist_date_fin').val(res['date_fin']);
+					setTimeout(function(){
+					    hist_sum=0;
+                        hist_tab =$('.hist_money');
+                        for(i=0 ; i < hist_tab.length;i++){
+                        	hist_sum+=parseInt(hist_tab[i].innerHTML);
+                        }
+                        $('#hist_total').html(hist_sum+'(DZD)');
+					});
 				}else{
 					alert('erreur');
 				}

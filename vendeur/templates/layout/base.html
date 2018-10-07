@@ -3,7 +3,7 @@
 {% block body %}
 <body>
   <div  class="sticky-top">
-  <nav  class="navbar  navbar-expand-lg navbar-light bg-light" style="box-shadow: 0 5px 10px 0 #0000000f;">
+  <nav  class="navbar  navbar-expand-md navbar-light bg-light" style="box-shadow: 0 5px 10px 0 #0000000f;">
 
         <a class="navbar-brand" href="/"><img src="{% static 'img/logo2.png' %} " width="150"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_id" aria-controls="navbar_id" aria-expanded="false" aria-label="Toggle navigation">
@@ -11,7 +11,7 @@
         </button>
         <p id="response" style="display: none;margin: auto 0;padding: 10px;font-size: initial;font-weight: bold;"></p>
         <div class="collapse navbar-collapse" id="navbar_id">
-          <ul class="navbar-nav mr-auto mt-2 mt-lg-0" >
+          <ul class="navbar-nav mr-auto mt-2 mt-lg-0 justify-content-center " >
             <li class="nav-item {% block activeP %}{% endblock%}"><a href="{% url 'produit' %}" class="nav-link"> Produits </a></li>
             <li class="nav-item {% block activeS %}{% endblock%}"><a href="{% url 'stat' %}" class="nav-link"> Statistiques </a></li>
             {% if user.vend_admin == 1 %}
@@ -21,9 +21,9 @@
             <li class="nav-item {% block activeAdm %}{% endblock%}"><a href="{% url 'administration' %}" class="nav-link"> Administration </a></li>
             {% endif %}
           </ul>
-          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0 justify-content-center ">
             <li class="nav-item">
-              <p style="margin: 0;padding: 0.5rem 0rem;padding-right: 1rem; display: inline;" >{{user.vend_name}}</p>
+              <p style="margin: 0;padding: 0.5rem 1rem;padding-right: 1rem; display: inline;" >{{user.vend_name}}</p>
               <a style="display: inline;" href="{% url 'deconncter' %}" class="nav-link">Deconnecter</a></li>
           </ul>
         </div>

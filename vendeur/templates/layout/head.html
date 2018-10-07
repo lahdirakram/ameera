@@ -3,7 +3,7 @@
 <html>
 <head>
   <title>Ameera London {% block title %}{% endblock %}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=0.6">
+  <meta name="viewport" content="width=device-width, initial-scale=0.7">
 
   <link rel="icon" href="{% static 'favicon.png' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'Bootstrap/bootstrap.css' %}">
@@ -15,7 +15,15 @@
 
 
   <style type="text/css">
-
+    .navbar-nav{
+        -webkit-box-orient: horizontal!important;
+        -webkit-box-direction: normal!important;
+        -ms-flex-direction: row !important;
+        flex-direction: row !important;
+    }
+    .nav-link{
+        padding: 0.5rem 1rem !important;
+    }
     .navbar{
       font-family: 'Ubuntu', Helvetica, Arial, sans-serif;;
     }
