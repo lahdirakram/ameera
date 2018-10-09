@@ -2,10 +2,10 @@
 {% load static %}
 {% block body %}
 <body>
-  <div  class="sticky-top">
-  <nav  class="navbar  navbar-expand-md navbar-light bg-light" style="box-shadow: 0 5px 10px 0 #0000000f;">
+  <div  class="fixed-top" id="navContainer">
+  <nav  class="navbar  navbar-expand-md navbar-light " style="/*box-shadow: 0 5px 10px 0 #0000000f;*/" id="mainnav">
 
-        <a class="navbar-brand" href="/"><img src="{% static 'img/logo2.png' %} " width="150"></a>
+        <a class="navbar-brand" href="/"><img src="{% static 'img/logo2.png' %} " style="transition: .5s; width:150px;"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_id" aria-controls="navbar_id" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -30,7 +30,20 @@
   </nav>
   {% block stat_nav %}{% endblock %}
   </div>
+  <div id="maincontent">
   {% block content%}{% endblock%}
+  </div>
+  <script type="text/javascript">
+        $(window).scroll(function(){
+            if($("#mainnav").offset().top > 100)
+                $("#mainnav").addClass("navbar-shrink").addClass("bg-light");
+            else
+                $("#mainnav").removeClass("navbar-shrink").removeClass("bg-light");
+        });
+        $('#maincontent').ready(function(){
+            $('#maincontent').css('margin-top',$("#navContainer").height()+10+'px');
+        });
+  </script>
   <footer class="footer navbar-dark bg-dark" >
     <div class="container" style="padding: 20px;">
       <div class="row">
