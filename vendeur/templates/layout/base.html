@@ -1,95 +1,176 @@
 {% extends 'layout/head.html' %}
 {% load static %}
 {% block body %}
-<body>
-  <div  class="fixed-top" id="navContainer">
-  <nav  class="navbar  navbar-expand-md navbar-light " style="/*box-shadow: 0 5px 10px 0 #0000000f;*/" id="mainnav">
-
-        <a class="navbar-brand" href="/"><img src="{% static 'img/logo2.png' %} " style="transition: .5s; width:150px;"></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_id" aria-controls="navbar_id" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <p id="response" style="display: none;margin: auto 0;padding: 10px;font-size: initial;font-weight: bold;"></p>
-        <div class="collapse navbar-collapse" id="navbar_id">
-          <ul class="navbar-nav mr-auto mt-2 mt-lg-0 justify-content-center " >
-            <li class="nav-item {% block activeP %}{% endblock%}"><a href="{% url 'produit' %}" class="nav-link"> Produits </a></li>
-            <li class="nav-item {% block activeS %}{% endblock%}"><a href="{% url 'stat' %}" class="nav-link"> Statistiques </a></li>
-            {% if user.vend_admin == 1 %}
-            <!-- <li class="nav-item {% block activeV %}{% endblock%}"><a href="{% url 'vendre' %}" class="nav-link"> Vendre </a></li>
-            <li class="nav-item {% block activeSto %}{% endblock%}"><a href="{% url 'stock' %}" class="nav-link"> Stock </a></li> -->
-            <li class="nav-item {% block activeA %}{% endblock%}"><a href="{% url 'action' %}" class="nav-link"> Actions</a></li>
-            <li class="nav-item {% block activeAdm %}{% endblock%}"><a href="{% url 'administration' %}" class="nav-link"> Administration </a></li>
-            {% endif %}
-          </ul>
-          <ul class="navbar-nav ml-auto mt-2 mt-lg-0 justify-content-center ">
-            <li class="nav-item">
-              <p style="margin: 0;padding: 0.5rem 1rem;padding-right: 1rem; display: inline;" >{{user.vend_name}}</p>
-              <a style="display: inline;" href="{% url 'deconncter' %}" class="nav-link">Deconnecter</a></li>
-          </ul>
+<body style="overflow-x: hidden;width: 100%;">
+  <div id="wrapper">
+    <nav id="sidebar" class="mCustomScrollbar">
+      <div class="sideWrapper">
+        <div id="dismiss">
+            <button class="btn btn-light">
+              <i class="fas fa-arrow-left"></i>
+            </button>
         </div>
-  </nav>
-  {% block stat_nav %}{% endblock %}
-  </div>
-  <div id="maincontent">
-  {% block content%}{% endblock%}
+        <div class="sidebar-header">
+              <h3 style="margin: 0;font-size: 1rem;" >{{user.vend_name}}</h3>
+              <a href="{% url 'deconncter' %}" >Deconnecter</a>
+        </div>
+        <ul class="list-unstyled components side_pages" style="margin-top: 15%;">
+            <li class="{% block activeP_side %}{% endblock%}">
+              <a href="{% url 'produit' %}" class="side_link"> Produits </a>
+            </li>
+            <li class="{% block activeS_side %}{% endblock%}">
+              <a href="{% url 'stat' %}" class="side_link"> Statistiques </a>
+            </li>
+            {% if user.vend_admin == 1 %}
+              <li class="{% block activeA_side %}{% endblock%}">
+                <a href="{% url 'action' %}" class="side_link"> Actions</a>
+              </li>
+              <li class="{% block activeAdm_side %}{% endblock%}">
+                <a href="{% url 'administration' %}" class="side_link"> Administration </a>
+              </li>
+            {% endif %}
+        </ul>
+        <div class="side_footer">
+          <div class="container">
+            <p>Suivez nous :</p>
+            <ul class="list-inline " style="color: black; text-align: center;">
+              <li class="list-inline-item">
+                  <a href="https://www.facebook.com"><i class="fab fa-facebook fa-3x"></i></a>
+              </li>
+              <li class="list-inline-item">
+                  <a href="https://www.instagram.com"><i class="fab fa-instagram fa-3x"></i></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div id="content">
+      <div  class="fixed-top" id="navContainer">
+        <nav  class="navbar  navbar-expand-md navbar-light " style="/*box-shadow: 0 5px 10px 0 #0000000f;*/" id="mainnav">
+
+              <a class="navbar-brand" href="/"><img src="{% static 'img/logo2.png' %} " style="transition: .5s; width:150px;"></a>
+              <button class="navbar-toggler" type="button" id="sidebarCollapse" >
+                <!-- data-toggle="collapse" data-target="#navbar_id" aria-controls="navbar_id" aria-expanded="false" aria-label="Toggle navigation" -->
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <p id="response" style="display: none;margin: auto 0;padding: 10px;font-size: initial;font-weight: bold;"></p>
+              <div class="collapse navbar-collapse" id="navbar_id">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0 justify-content-center " >
+                  <li class="nav-item {% block activeP %}{% endblock%}">
+                    <a href="{% url 'produit' %}" class="nav-link"> Produits </a>
+                  </li>
+                  <li class="nav-item {% block activeS %}{% endblock%}">
+                    <a href="{% url 'stat' %}" class="nav-link"> Statistiques </a>
+                  </li>
+                  {% if user.vend_admin == 1 %}
+                  <li class="nav-item {% block activeA %}{% endblock%}">
+                    <a href="{% url 'action' %}" class="nav-link"> Actions</a>
+                  </li>
+                  <li class="nav-item {% block activeAdm %}{% endblock%}">
+                    <a href="{% url 'administration' %}" class="nav-link"> Administration </a>
+                  </li>
+                  {% endif %}
+                </ul>
+                <ul class="navbar-nav ml-auto mt-2 mt-lg-0 justify-content-center ">
+                  <li class="nav-item">
+                    <p style="margin: 0;padding: 0.5rem 1rem;padding-right: 1rem; display: inline;" >{{user.vend_name}}</p>
+                    <a style="display: inline;" href="{% url 'deconncter' %}" class="nav-link">Deconnecter</a>
+                  </li>
+                </ul>
+              </div>
+        </nav>
+        {% block stat_nav %}{% endblock %}
+      </div>
+      <div id="maincontent">
+      {% block content%}{% endblock%}
+      </div>
+      <script type="text/javascript">
+            $(window).scroll(function(){
+                if($("#mainnav").offset().top > 50)
+                    $("#mainnav").addClass("navbar-shrink").addClass("bg-light");
+                else
+                    $("#mainnav").removeClass("navbar-shrink").removeClass("bg-light");
+                console.log($("#mainnav").offset().top);
+            });
+            $('#maincontent').ready(function(){
+                $('#maincontent').css('margin-top',$("#navContainer").height()+10+'px');
+            });
+
+      </script>
+      <footer class="footer navbar-dark bg-dark" >
+        <div class="container" style="padding: 20px;">
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <ul class="list-unstyled footer-item " style="margin: auto;">
+                <li>
+                  <span class="fa-stack" style="vertical-align: unset;">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fas fa-map-marker-alt fa-stack-1x fa-inverse"></i>
+                  </span>
+                  <p style="color: white;">Centre commercial Bebezzouar <br> <b>Alger,Algerie</b> </p>
+                </li>
+                <li>
+                  <span class="fa-stack" >
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fas fa-phone fa-stack-1x fa-inverse"></i>
+                  </span>
+                  <p style="color: white;"> <b>+213 550 69 93 86</b> </p>
+                </li>
+                <li>
+                  <span class="fa-stack" >
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                  <p style="color: white;"> <b>contact@ameeralondon.com</b> </p>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <ul class="list-unstyled footer-item">
+                <li>
+                    <span class="fa-stack" >
+                      <i class="fa fa-square fa-stack-2x"></i>
+                      <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                    </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <hr style="color: white;">
+          <div style="color: white;text-align: center;">
+            <p>{% now "Y" %} © All rights reserved . </p>
+            <span>Icon made by <a title="Freepik" href="http://www.freepik.com">Freepik</a> from <a title="Flaticon" href="http://www.flaticon.com">www.flaticon.com</a>&nbsp;</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- Dark Overlay element -->
+    <div class="overlay"></div>
   </div>
   <script type="text/javascript">
-        $(window).scroll(function(){
-            if($("#mainnav").offset().top > 100)
-                $("#mainnav").addClass("navbar-shrink").addClass("bg-light");
-            else
-                $("#mainnav").removeClass("navbar-shrink").removeClass("bg-light");
-        });
-        $('#maincontent').ready(function(){
-            $('#maincontent').css('margin-top',$("#navContainer").height()+10+'px');
-        });
-  </script>
-  <footer class="footer navbar-dark bg-dark" >
-    <div class="container" style="padding: 20px;">
-      <div class="row">
-        <div class="col-md-6 col-sm-12">
-          <ul class="list-unstyled footer-item " style="margin: auto;">
-            <li>
-              <span class="fa-stack" style="vertical-align: unset;">
-                <i class="fa fa-circle fa-stack-2x"></i>
-                <i class="fas fa-map-marker-alt fa-stack-1x fa-inverse"></i>
-              </span>
-              <p style="color: white;">Centre commercial Bebezzouar <br> <b>Alger,Algerie</b> </p>
-            </li>
-            <li>
-              <span class="fa-stack" >
-                <i class="fa fa-circle fa-stack-2x"></i>
-                <i class="fas fa-phone fa-stack-1x fa-inverse"></i>
-              </span>
-              <p style="color: white;"> <b>+213 550 69 93 86</b> </p>
-            </li>
-            <li>
-              <span class="fa-stack" >
-                <i class="fa fa-circle fa-stack-2x"></i>
-                <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-              </span>
-              <p style="color: white;"> <b>contact@ameeralondon.com</b> </p>
-            </li>
-          </ul>
-        </div>
-        <div class="col-md-6 col-sm-12">
-          <ul class="list-unstyled footer-item">
-            <li>
-                <span class="fa-stack" >
-                  <i class="fa fa-square fa-stack-2x"></i>
-                  <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
-                </span>
+    $(document).ready(function () {
+      $('#dismiss, .overlay').on('click', function () {
+          // hide sidebar
+          $('#sidebar').removeClass('active');
+          $('#content').removeClass('active');
+          $('#navContainer').removeClass('active');
+          // hide overlay
+          $('.overlay').removeClass('active');
+      });
+      $('#sidebarCollapse').on('click', function () {
+          // open sidebar
+          $('#sidebar').addClass('active');
+          $('#content').addClass('active');
+          $('#navContainer').addClass('active');
 
-            </li>
-          </ul>
-        </div>
-      </div>
-      <hr style="color: white;">
-      <div style="color: white;text-align: center;">
-        <p>{% now "Y" %} © All rights reserved . </p>
-        <span>Icon made by <a title="Freepik" href="http://www.freepik.com">Freepik</a> from <a title="Flaticon" href="http://www.flaticon.com">www.flaticon.com</a>&nbsp;</span>
-      </div>
-    </div>
-  </footer>
+          // fade in the overlay
+          $('.collapse.in').toggleClass('in');
+          $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+          $('.overlay').addClass('active');
+      });
+
+    });
+  </script>
 </body>
 {% endblock %}

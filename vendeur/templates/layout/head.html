@@ -3,7 +3,8 @@
 <html>
 <head>
   <title>Ameera London {% block title %}{% endblock %}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=0.7">
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=0.7" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
   <!-- <link rel="icon" href="{% static 'favicon.png' %}"> -->
   <link rel="apple-touch-icon" sizes="57x57" href="{% static '/icons/apple-icon-57x57.png' %}">
   <link rel="apple-touch-icon" sizes="60x60" href="{% static '/icons/apple-icon-60x60.png' %}">
@@ -24,24 +25,20 @@
   <meta name="theme-color" content="#ffffff">
 
 
-
-
-
-
   <link rel="stylesheet" type="text/css" href="{% static 'Bootstrap/bootstrap.css' %}">
   <link href="{% static '/css/fontawesome-all.css' %}" rel="stylesheet">
-
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
-
-
-
+  <link href="https://fonts.googleapis.com/css?family=Inconsolata:700" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{% static '/css/sidebar.css'%}">
   <style type="text/css">
     #mainnav.navbar-shrink .navbar-brand img {
         width:100px!important;
     }
     #mainnav.navbar-shrink {
         box-shadow: 0 5px 10px 0 #0000000f;
+    .navbar{
+      font-family: 'Inconsolata', monospace;
     }
     .navbar-nav{
         -webkit-box-orient: horizontal!important;
@@ -52,8 +49,16 @@
     .nav-link{
         padding: 0.5rem 1rem !important;
     }
-    .navbar{
-      font-family: 'Ubuntu', Helvetica, Arial, sans-serif;;
+    .navbar-nav .active > .nav-link ,#sidebar .active > .side_link{
+      color: white!important;
+      background: #171819;
+      border-radius: 5px;
+    }
+    #mainnav.navbar-shrink .navbar-brand img {
+        width:100px!important;
+    }
+    #mainnav.navbar-shrink {
+        box-shadow: 0 5px 10px 0 #0000000f;
     }
   	.product-image img{
   		padding: 20px;
@@ -96,6 +101,9 @@
     }
     .active_svg img{
     filter: invert(100%)!important;
+    }
+    .container {
+      position: relative;
     }
     /* width */
     ::-webkit-scrollbar {

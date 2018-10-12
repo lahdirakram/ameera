@@ -2,6 +2,7 @@
 {% load static %}
 {% block title %}| Produit{% endblock %}
 {% block activeP %}active{% endblock%}
+{% block activeP_side %}active{% endblock%}
 {% block content %}
 <style type="text/css">
 	.b:hover{
@@ -24,7 +25,9 @@
 <div class="container">
 	<div class="row" style="margin: 0px">
 		{% for prod in prod_list %}
-	    <div class=" col-lg-4 col-sm-6 border-bottom" style="padding-bottom: 20px">
+	    <div 	id="id{{prod.id}}" 
+	    		class="col-lg-4 col-sm-6 border-bottom notselected" 
+	    		style="padding-bottom: 20px;transition: .5s;">
 			<div class="product-image"  style="overflow: hidden;">
 				<img src="{{prod.image}}" >
 			</div>
@@ -35,6 +38,9 @@
 		{% endfor %}
 		<script type="text/javascript">
 			$('.product-image').css('max-height',$('.product-image').width());
+			$(window).resize(function () {
+				$('.product-image').css('max-height',$('.product-image').width());
+			});
 		</script>
 	</div>
 </div>
