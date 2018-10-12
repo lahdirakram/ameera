@@ -9,7 +9,7 @@ function scrolto(id,elm) {
   }
   $('html, body').animate({
         scrollTop: $(id).offset().top-160
-    }, 2000);
+    });
 }
 
 lastelm_sm=null
@@ -28,7 +28,7 @@ function scrolto_sm(id,elm) {
   }
   $('html, body').animate({
         scrollTop: $(id).offset().top-160
-    }, 2000);
+    });
 }
 
 function dict_to_utc(dict_array) {
@@ -44,4 +44,6 @@ function dict_to_utc(dict_array) {
   }
   return dict_array;
 }
+
+
 
