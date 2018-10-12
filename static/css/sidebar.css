@@ -1,0 +1,102 @@
+.wrapper {
+    display: block;
+}
+#sidebar.active{
+  left: 0px!important;
+  border-left: 1px solid black;
+
+}
+#content.active{
+  left: 60%;
+}
+#navContainer.active{
+  left: 60%;
+  right: -60%;
+}
+#navContainer{
+  transition: all 0.2s;
+}
+#content{
+  left: 0;
+  width: 100%;
+  position: absolute;
+  transition: all 0.2s;
+}
+#sidebar {
+    overflow: visible;
+    min-width: 60%;
+    max-width: 60%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: -60%;
+    /* top layer */
+    z-index: 1032;
+    background: #f8f9fa;
+    color: #343a40;
+    transition: all 0.2s;
+    overflow-y: hidden;
+    padding: 15px;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    /* full screen */
+    width: 100vw;
+    height: 100vh;
+    /* transparent black */
+    background: rgba(0, 0, 0, 0);
+    /* middle layer, i.e. appears below the sidebar */
+    z-index: 1031;
+    opacity: 0;
+    /* animate the transition */
+    transition: all 0.5s ease-in-out;
+}
+/* display .overlay when it has the .active class */
+.overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+#dismiss {
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    /* top right corner of the sidebar */
+    top: 0px;
+    right: 0px;
+}
+#sidebar ul {
+  font-family: 'Inconsolata', monospace;
+}
+.side_pages,#sidebar a{
+  width: 100%;
+}
+#sidebar a{
+  display: block;
+  text-decoration: none;
+  color: #00000080;
+}
+#sidebar a:hover{
+  color: #000000c7;
+}
+#sidebar .sidebar-header{
+  padding: 0.5rem 1rem;
+  padding-top: 20%;
+}
+#sidebar .side_link {
+  padding: 0.5rem 1rem !important;
+  margin: 0.5rem 0;
+}
+#sidebar .sideWrapper{
+  position: relative;
+  height: 100vh;
+}
+#sidebar .side_footer{
+  position: absolute;
+  bottom: 20%;
+  width: 100%;
+}

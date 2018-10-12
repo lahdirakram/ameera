@@ -16,20 +16,8 @@ def produit(request):
 	if  user == None:
 		return redirect('home')
 
-	prod_list=[]
-	for prod in Product.objects.raw("select * from vendeur_product where id > 0"):
-		prod_one={'id':prod.id,'name':prod.prod_name,'image':prod.prod_image.url,'pu':prod.prod_PU,'qte':prod.prod_Q,'sell':prod.prod_sell}
-		prod_list.append(prod_one)
-
-	saved=''
-
-	if request.method == 'POST':
-		form = ProdForm(request.POST, request.FILES)
-		if form.is_valid():
-			form.save()
-			saved='true'
-
-	return render(request,'main_pages/produits.html',{'prod_list':prod_list,'saved':saved,'user':user})
+	prod_list=Product.products()
+	return render(request,'main_pages/produits.html',{'prod_list':prod_list,'user':user})
 
 def stat(request):
 	user = check_in(request)
@@ -37,18 +25,19 @@ def stat(request):
 		return redirect('home')
 	return render(request,'main_pages/stat.html',{'user':user})
 
+def action(request):
+	user = check_in(request)
+	if  user == None:
+		return redirect('home')
+	return render(request,'main_pages/action.html',{'user':user})
 def vendre(request):
 	user = check_in(request)
 	if  user == None:
 		return redirect('home')
 
-	prod_list=[]
-	for prod in Product.objects.raw("select * from vendeur_product"):
-		prod_one={'id':prod.id,'name':prod.prod_name,'image':prod.prod_image,'pu':prod.prod_PU,'qte':prod.prod_Q,'sell':prod.prod_sell}
-		prod_list.append(prod_one)
+	prod_list=Product.products()
 
 	if request.method=="POST":
-		# vendeur_id=request.POST.get('vendeur_id')
 		prod_id=request.POST.get('prod_id')
 		qte=request.POST.get('qte')
 		pu=request.POST.get('pu')
@@ -61,11 +50,6 @@ def vendre(request):
 		else:
 			h_p_s=prod.prod_PU-int(pu)
 			price=int(pu)
-		# try:
-		# 	vend =vendeur.objects.get(vend_code=vendeur_id)
-		# except:
-		# 	vend=None
-
 
 		a=history.objects.filter(hist_date=datetime.date.today(),hist_prod_id_id=prod_id,hist_prix_sell=h_p_s,hist_etat=int(etat))
 		if not a.exists():
@@ -94,74 +78,51 @@ def stock(request):
 	if  user == None:
 		return redirect('home')
 
-	prod_list=[]
-	for prod in Product.objects.raw("select * from vendeur_product"):
-		prod_one={'id':prod.id,'name':prod.prod_name,'image':prod.prod_image,'pu':prod.prod_PU,'qte':prod.prod_Q,'sell':prod.prod_sell}
-		prod_list.append(prod_one)
+	prod_list=Product.products()
 
 	if request.method == "POST":
-		# vendeur_id=request.POST.get('vendeur_id')
 		prod_id=request.POST.get('prod_id')
 		qte=request.POST.get('qte')
-		#if vendeur.objects.filter(vend_code=vendeur_id).exists():
+
 		prod= Product.objects.get(id=int(prod_id))
 		prod.prod_Q+=int(qte)
 		prod.save()
 		return redirect('action')
-
-
 	return render(request,'main_pages/stock.html',{'prod_list':prod_list,'user':user})
+
 def testeur_in(request):
 	user = check_in(request)
 	if  user == None:
 		return redirect('home')
 
-	prod_list=[]
-	for prod in Product.objects.raw("select * from vendeur_product"):
-		prod_one={'id':prod.id,'name':prod.prod_name,'image':prod.prod_image,'pu':prod.prod_PU,'qte':prod.prod_Q,'sell':prod.prod_sell}
-		prod_list.append(prod_one)
+	prod_list=Product.products()
+
 	if request.method == "POST":
 		prod_id=request.POST.get('prod_id')
 		qte=request.POST.get('qte')
-
 		prod= Product.objects.get(id=int(prod_id))
-
 		prod_test.objects.create(prod=prod,date=datetime.date.today(),qte=int(qte))
-
 		prod.prod_Q-=int(qte)
 		prod.save()
 		return redirect('action')
-
-
 	return render(request,'main_pages/testeur.html',{'prod_list':prod_list,'user':user})
 
 
-def action(request):
-	user = check_in(request)
-	if  user == None:
-		return redirect('home')
-	return render(request,'main_pages/action.html',{'user':user})
 def home(request):
 	a=history.objects.filter(hist_date=datetime.date.today())
 	if(not a.exists()):
 		history.objects.create(hist_date=datetime.date.today(),hist_nbr_sell=0,hist_money=0,hist_prod_id=Product.objects.get(id=0),hist_prix_sell=None,hist_etat=1)
+
 	if request.method == "POST":
 		form=Connect(request.POST)
 		if form.is_valid():
-			a=vendeur.objects.filter(vend_name=form.cleaned_data['user_name'],vend_code=form.cleaned_data['password'])
-			b=vendeur.objects.filter(vend_user_name=form.cleaned_data['user_name'],vend_code=form.cleaned_data['password'])
-
-			if a.exists():
-				c=a[0]
-			else:
-				if b.exists():
-					c=b[0]
-				else:
-					c=None
-
-			if c != None:
-				hashes=Hash.generate_id(c)
-				user_bis.objects.create(user=c,user_coockie_hash= hashes['hashed2'])
+			try:
+				user=vendeur.objects.get(vend_user_name=form.cleaned_data['user_name'],vend_code=form.cleaned_data['password'])				
+			except:
+				user=None
+			if user != None:
+				hashes=Hash.generate_id(user)
+				user_bis.objects.create(user=user,user_coockie_hash= hashes['hashed2'])
 				response= redirect('produit')
 				response.set_cookie('remember_me',hashes['hashed'],max_age=3600*24*10)
 				return response
@@ -186,26 +147,11 @@ def deconncter(request):
 
 def administration(request):
 	user = check_in(request)
-	if  user == None:
-		return HttpResponse('')
-	if user.vend_admin == 0:
-		return HttpResponse('')
+	if  user == None or user.vend_admin == 0:
+		return HttpResponse('Acces Refusé !!')
 
-	employes=[]
-	products=[]
-
-	for p in Product.objects.all():
-		if p.id != 0:
-			prod={'code':p.id,'nom':p.prod_name,'image':p.prod_image.url,'qte':p.prod_Q,'sell':p.prod_sell,'prix':p.prod_PU}
-			products.append(prod)
-
-	for e in vendeur.objects.all():
-		emp={'id':e.id,'nom':e.vend_name,'username':e.vend_user_name,'type':e.vend_admin}
-		employes.append(emp)
-
-
-
-
+	employes=vendeur.vendeurs()
+	products=Product.products()
 	return render(request,'main_pages/administration.html',{'employes':employes,'products':products,'user':user})
 
 
@@ -250,6 +196,7 @@ def stat_prod_list(request):
 			prod_list.append(prod_one)
 		for prod in Product.objects.raw("select p.id,sum(h.hist_money) credit from vendeur_product p,vendeur_history h where p.id=h.hist_prod_id_id and p.id>0 and h.hist_etat = 0 group by h.hist_prod_id_id"):
 			prod_list[prod.id-1]['credit']=prod.credit
+
 		if request.POST.get('print') == 'true':
 			print_ = 'some thing';
 
@@ -268,9 +215,7 @@ def stat_hist_list(request):
 		if request.POST.get('date_fin') is not None:
 			date_fin=request.POST.get('date_fin')
 
-		for hist in history.objects.raw('select * from vendeur_history where hist_date >= "'+str(date_deb)+'" and hist_date < "'+str(date_fin)+'" ORDER BY hist_date desc'):
-			hist_one={'date':hist.hist_date.strftime('%d %B %Y'),'prod':hist.hist_prod_id.prod_name,'qte':hist.hist_nbr_sell,'pred':hist.hist_prix_sell,'money':hist.hist_money,'etat':hist.hist_etat}
-			hist_list.append(hist_one)
+		hist_list=history.history_query(date_deb,date_fin)
 
 	return JsonResponse({'hist_list':hist_list,'date_deb':date_deb,'date_fin':date_fin})
 
@@ -278,12 +223,9 @@ def stat_employe_list(request):
 	user = check_in(request)
 	if  user == None:
 		return HttpResponse('Error')
-
-	emp_list=[]
-	if request.method=="POST":
-		emp_list=vendeur.objects.all()
-
+	emp_list=vendeur.objects.all()
 	return render(request,'parts_of_pages/stat_employe_list.html',{'emp_list':emp_list})
+
 def stat_ventes_non_paye(request):
 	user = check_in(request)
 	if  user == None:
@@ -337,13 +279,7 @@ def stat_testeur(request):
 	user = check_in(request)
 	if  user == None:
 		return HttpResponse('Acces non autorisé')
-
-	testeurList=[]
-	if request.method == "POST":
-		for t in prod_test.objects.all():
-			test = {'date':t.date.strftime('%d %B %Y'),'prod':t.prod.prod_name,'qte':t.qte}
-			testeurList.append(test)
-
+	testeurList=prod_test.tests()
 	return JsonResponse({'testeurList':testeurList})
 
 
