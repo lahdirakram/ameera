@@ -2,6 +2,7 @@
 {% load static %}
 {% block title %}| Administration{% endblock %}
 {% block activeAdm %}active{% endblock%}
+{% block activeAdm_side %}active{% endblock%}
 {% block content %}
 <div class="container">
 	<div id="table_des_ventes" class="stat_table_container">
@@ -20,7 +21,7 @@
 					<th>#id</th>
 					<th>Produit</th>
 					<th>Image</th>
-					<th>Qte<span class="d-none d-md-block"><br>dispo</span></th>
+					<th>Qte <span class="d-none d-md-inline-block">dispo</span></th>
 					<th>Prix (DZD)</th>
 					<th></th>
 				</tr>
@@ -28,16 +29,16 @@
 			<tbody id="prod_list_table">
 				{% for p in products %}
 					<tr>
-						<td>{{p.code}}</td>
-						<td>{{p.nom}}</td>
-						<td style="position: relative;" id="{{p.code}}hover">
+						<td>{{p.id}}</td>
+						<td>{{p.name}}</td>
+						<td style="position: relative;" id="{{p.id}}hover">
 							<img style="max-width: 30px;max-height: 30px;" src="{{p.image}}">
-							<div id="{{p.code}}" style="position: absolute;top: -50px;left: -49px;z-index: 5;">
+							<div id="{{p.id}}" style="position: absolute;top: -50px;left: -49px;z-index: 5;">
 								<img style="max-width: 150px;max-height: 150px;" src="{{p.image}}">
 							</div>
 						</td>
 						<td>{{p.qte}}</td>
-						<td>{{p.prix}}</td>
+						<td>{{p.pu}}</td>
 						<td style="text-align: right;">
 							{% if p.sell == 0 %}
 								<button class="btn btn-outline-dark btn-sm">Supprimer</button>
@@ -47,12 +48,12 @@
 
 					</tr>
 					<script type="text/javascript">
-						$('#{{p.code}}').hide();
-						$('#{{p.code}}hover').hover(function () {
-							$('#{{p.code}}').show();
+						$('#{{p.id}}').hide();
+						$('#{{p.id}}hover').hover(function () {
+							$('#{{p.id}}').show();
 						});
-						$('#{{p.code}}hover').mouseleave(function () {
-							$('#{{p.code}}').hide();
+						$('#{{p.id}}hover').mouseleave(function () {
+							$('#{{p.id}}').hide();
 						});
 					</script>
 				{% endfor %}

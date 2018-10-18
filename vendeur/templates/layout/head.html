@@ -32,11 +32,6 @@
   <link href="https://fonts.googleapis.com/css?family=Inconsolata:700" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="{% static '/css/sidebar.css'%}">
   <style type="text/css">
-    #mainnav.navbar-shrink .navbar-brand img {
-        width:100px!important;
-    }
-    #mainnav.navbar-shrink {
-        box-shadow: 0 5px 10px 0 #0000000f;
     .navbar{
       font-family: 'Inconsolata', monospace;
     }
@@ -49,10 +44,11 @@
     .nav-link{
         padding: 0.5rem 1rem !important;
     }
-    .navbar-nav .active > .nav-link ,#sidebar .active > .side_link{
+    .navbar-nav .active > .nav-link ,#sidebar .active > .side_link,#sidebar .side_link:focus{
       color: white!important;
       background: #171819;
       border-radius: 5px;
+      box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
     }
     #mainnav.navbar-shrink .navbar-brand img {
         width:100px!important;
