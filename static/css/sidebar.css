@@ -14,13 +14,13 @@
   right: -60%;
 }
 #navContainer{
-  transition: all 0.2s;
+  transition: all 0.1s;
 }
 #content{
   left: 0;
   width: 100%;
   position: absolute;
-  transition: all 0.2s;
+  transition: all 0.1s;
 }
 #sidebar {
     overflow: visible;
@@ -34,7 +34,7 @@
     z-index: 1032;
     background: #f8f9fa;
     color: #343a40;
-    transition: all 0.2s;
+    transition: all 0.1s;
     overflow-y: hidden;
     padding: 15px;
 }

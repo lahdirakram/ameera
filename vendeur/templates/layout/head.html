@@ -59,7 +59,34 @@
   	.product-image img{
   		padding: 20px;
   		width: 100%;
+      transition: all 0.2s;
   	}
+    .product-image img:hover{
+      padding: 0px;
+    }
+    .prod_details p{
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin: 0;
+    }
+    .prod_details small{
+      font-size: 12px;
+      font-weight: 300;
+      letter-spacing: normal;
+    }
+    .prod_details{
+      text-align:center;
+    }
+    .prod_details p,.prod_details small{
+      color: #232323;
+      margin: auto;
+      font-family: Montserrat;
+      display: inline-block;
+    }
+    .prod_details small {
+        filter: opacity(70%);
+    }
     .footer-item{
       padding: 5px;
     }
@@ -77,6 +104,10 @@
       background: white;
       border-radius: 10px;
       box-shadow: 0 5px 9px 1px #d8d8d8a1;
+    }
+    .navbar-brand img{
+      transition: .5s; 
+      width:150px;
     }
     @media(min-width: 768px){
         .main{
@@ -131,4 +162,15 @@
   <script type="text/javascript" src="{% static 'functions.js' %}"></script>
 </head>
 {% block body %}{% endblock %}
+<script type="text/javascript">
+  $(window).scroll(function(){
+      if($("#mainnav").offset().top > 50)
+          $("#mainnav").addClass("navbar-shrink").addClass("bg-light");
+      else
+          $("#mainnav").removeClass("navbar-shrink").removeClass("bg-light");
+  });
+  $('#maincontent').ready(function(){
+      $('#maincontent').css('margin-top',($("#navContainer").height()+10)+'px');
+  });
+</script>
 </html>

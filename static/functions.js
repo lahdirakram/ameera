@@ -8,7 +8,7 @@ function scrolto(id,elm) {
   lastelm=$(elm);
   }
   $('html, body').animate({
-        scrollTop: $(id).offset().top-160
+        scrollTop: $(id).offset().top-$("#navContainer").height()-10
     });
 }
 
@@ -27,7 +27,7 @@ function scrolto_sm(id,elm) {
     alert('else');
   }
   $('html, body').animate({
-        scrollTop: $(id).offset().top-160
+        scrollTop: $(id).offset().top-$("#navContainer").height()-10
     });
 }
 
