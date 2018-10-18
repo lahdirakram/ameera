@@ -4,38 +4,18 @@
 {% block activeP %}active{% endblock%}
 {% block activeP_side %}active{% endblock%}
 {% block content %}
-<style type="text/css">
-	.b:hover{
-		color: #1b1d1f!important;
-	}
-	.prod_details{
-		text-align:center;
-	}
-	.prod_details p,.prod_details small{
-		font-size: 12px;
-		color: #232323;
-		margin: auto;
-		font-family: Montserrat;color: #232323;
-		display: inline-block;
-	}
-	.prod_details small {
-	    filter: opacity(70%);
-	}
-</style>
 <div class="container">
 	<div class="row" style="margin: 0px">
 		{% for prod in prod_list %}
-	    <div 	id="id{{prod.id}}" 
-	    		class="col-lg-4 col-sm-6 border-bottom notselected" 
-	    		style="padding-bottom: 20px;transition: .5s;">
-			<div class="product-image"  style="overflow: hidden;">
-				<img src="{{prod.image}}" >
+		    <div id="id{{prod.id}}" class="col-lg-4 col-sm-6 prod_div" style="padding-bottom: 20px;transition:top .5s;">
+				<div class="product-image"  style="overflow: hidden;">
+					<img src="{{prod.image}}" >
+				</div>
+				<div class="prod_details" style="text-align: center;">
+					<span><p>{{ prod.name }} - </p><small> {{ prod.pu }} DZD</small></span>
+				</div>
 			</div>
-			<div class="prod_details" style="text-align: center;">
-				<p>{{ prod.name }}</p> - <small >{{ prod.pu }} DZD</small>
-			</div>
-		</div>
-		{% endfor %}
+			{% endfor %}
 		<script type="text/javascript">
 			$('.product-image').css('max-height',$('.product-image').width());
 			$(window).resize(function () {

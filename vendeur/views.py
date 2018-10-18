@@ -134,7 +134,8 @@ def home(request):
 			a=user_bis.objects.filter(user_coockie_hash=Hash.get_id(request.COOKIES['remember_me']))
 			if a.exists():
 				return redirect('produit')
-	return render(request,'main_pages/home.html',{'form':form})
+	prod_list=Product.products()
+	return render(request,'main_pages/home.html',{'form':form,'prod_list':prod_list})
 
 def deconncter(request):
 	if 'remember_me' in request.COOKIES:
@@ -289,3 +290,4 @@ def print_stat(request):
 	if  user == None:
 		return HttpResponse('Error')
 	return render(request,'print_files/stat.html')
+

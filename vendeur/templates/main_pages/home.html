@@ -1,54 +1,125 @@
 {% extends 'layout/head.html' %}
 {% load static %}
 {% block body %}
-<script type="text/javascript">alert('this is a test version : \n type admin admin to visit the inside')</script>
 <body>
-	<div style="width: 100%; position: fixed;top: 0;z-index: -1;">
-		<img src="{% static  'img/background.jpg' %}" style="max-height: 100vh">
-	</div>
-	<nav  class="navbar sticky-top navbar-expand-lg navbar-inverse navbar-light bg-light" style="box-shadow: 0 5px 10px 0 #0000000f;">
+	<div  class="fixed-top" id="navContainer">
+	<nav class="navbar navbar-expand-md navbar-light" id="mainnav">
 		<div class="container">
 			<a class="navbar-brand" href="/"><img src="{% static 'img/logo2.png' %} " width="150"></a>
 			<ul class="navbar-nav ml-auto mt-2 mt-lg-0" >
-				<!-- <li class="nav-item"><a href="#" class="nav-link" id="connect">Connect</a></li> -->
+				<li class="nav-item active">
+					<a href="#" class="nav-link" id="connect" data-toggle="modal" data-target="#connectmodal">Connect</a>
+				</li>
 			</ul>
 		</div>
 	</nav>
-	<div class="container" style="position: relative;">
-		<div id="welcom_text" class="main col-sm-10 col-md-5" style="text-align: center;padding: 10px;">
-			<h3 style="font-family: 'Montserrat', sans-serif;"></h3>
-			<p style="font-size: 20px; margin-bottom: 40px;">Discover our organic, luxurious skincare range sourced from Morocco’s Atlas Mountains and Argan trees and inspired by ancient Moroccan beauty secrets.</p>
-			<a href="#" class="btn btn-outline-dark">Learn more</a>
-			<a href="#" class="btn btn-dark"  id="connect">Connect</a>
-		</div>
-		<div id="connect_form" class="main col-sm-10 col-md-5">
-			<div class="container">
-			<form method="POST" style="padding: 20px;">
-				{% csrf_token %}
-				<div class="has-errors text-danger small">
-				{{form.non_field_errors}}
+	</div>
+	<div class="container" id="maincontent" style="position: relative;">
+		<div class="row" style="margin: 0px">
+			{% for prod in prod_list %}
+		    <div id="id{{prod.id}}" class="col-lg-4 col-sm-6 prod_div" style="padding-bottom: 20px;transition:top .5s;">
+				<div class="product-image"  style="overflow: hidden;">
+					<img src="{{prod.image}}" >
 				</div>
-
-                <div class="form-group">
-				    {{ form.user_name.label_tag }}
-				    {{ form.user_name }}
-				    <div class="has-errors text-danger small">
-	                {{ form.user_name.errors }}
-	            	</div>
-                </div>
-                <div class="form-group">
-				    {{ form.password.label_tag }}
-				    {{ form.password }}
-				    <div class="has-errors text-danger small">
-	                {{ form.password.errors }}
-	            	</div>
-                </div>
-				<div class="form-group">
-					<input class="form-control" type="submit" value="Connecter">
+				<div class="prod_details" style="text-align: center;">
+					<span><p>{{ prod.name }} - </p><small> {{ prod.pu }} DZD</small></span>
 				</div>
-			</form>
 			</div>
+			{% endfor %}
+			<script type="text/javascript">
+				$('.product-image').css('max-height',$('.product-image').width());
+				$(window).resize(function () {
+					$('.product-image').css('max-height',$('.product-image').width());
+				});
+			</script>
 		</div>
+	</div>
+	<footer class="footer navbar-dark bg-dark" >
+        <div class="container" style="padding: 20px;">
+          <div class="row">
+            <div class="col-md-6 col-sm-12" >
+              <ul class="list-unstyled footer-item " style="margin: auto;">
+                <li>
+                  <span class="fa-stack" style="vertical-align: unset;">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fas fa-map-marker-alt fa-stack-1x fa-inverse"></i>
+                  </span>
+                  <p style="color: white;">Centre commercial Bebezzouar <br> <b>Alger,Algerie</b> </p>
+                </li>
+                <li>
+                  <span class="fa-stack" >
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fas fa-phone fa-stack-1x fa-inverse"></i>
+                  </span>
+                  <p style="color: white;"> <b>+213 550 69 93 86</b> </p>
+                </li>
+                <li>
+                  <span class="fa-stack" >
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                  <p style="color: white;"> <b>contact@ameeralondon.com</b> </p>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <ul class="list-unstyled footer-item">
+                <li>
+                    <span class="fa-stack" >
+                      <i class="fa fa-square fa-stack-2x"></i>
+                      <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                    </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <hr style="color: white;">
+          <div style="color: white;text-align: center;">
+            <p>{% now "Y" %} © All rights reserved . </p>
+            <span>Icon made by <a title="Freepik" href="http://www.freepik.com">Freepik</a> from <a title="Flaticon" href="http://www.flaticon.com">www.flaticon.com</a>&nbsp;</span>
+          </div>
+        </div>
+      </footer>
+	<!-- Modal -->
+	<div class="modal fade" id="connectmodal"tabindex="-1" role="dialog" aria-labelledby="connectmodalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header" style="background: #343a40; color: white;">
+	        <h5 class="modal-title" id="connectmodalLabel">Connection</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true" style="color: white;">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<div class="container">
+				<form method="POST" style="padding: 20px;">
+					{% csrf_token %}
+					<div class="has-errors text-danger small">
+					{{form.non_field_errors}}
+					</div>
+
+	                <div class="form-group">
+					    {{ form.user_name.label_tag }}
+					    {{ form.user_name }}
+					    <div class="has-errors text-danger small">
+		                {{ form.user_name.errors }}
+		            	</div>
+	                </div>
+	                <div class="form-group">
+					    {{ form.password.label_tag }}
+					    {{ form.password }}
+					    <div class="has-errors text-danger small">
+		                {{ form.password.errors }}
+		            	</div>
+	                </div>
+					<div class="form-group">
+						<input class="btn btn-outline-dark form-control" type="submit" value="Connecter">
+					</div>
+				</form>
+			</div>
+	      </div>
+	    </div>
+	  </div>
 	</div>
 	<script type="text/javascript">
 		$('#connect_form').hide();
