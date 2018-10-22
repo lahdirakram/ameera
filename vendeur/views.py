@@ -117,7 +117,7 @@ def home(request):
 		form=Connect(request.POST)
 		if form.is_valid():
 			try:
-				user=vendeur.objects.get(vend_user_name=form.cleaned_data['user_name'],vend_code=form.cleaned_data['password'])				
+				user=vendeur.objects.get(vend_user_name=form.cleaned_data['user_name'],vend_code=form.cleaned_data['password'])
 			except:
 				user=None
 			if user != None:
@@ -225,7 +225,8 @@ def stat_employe_list(request):
 	if  user == None:
 		return HttpResponse('Error')
 	emp_list=vendeur.objects.all()
-	return render(request,'parts_of_pages/stat_employe_list.html',{'emp_list':emp_list})
+	# return render(request,'parts_of_pages/stat_employe_list.html',{'emp_list':emp_list})
+	return HttpResponse('Pas disponible !')
 
 def stat_ventes_non_paye(request):
 	user = check_in(request)
