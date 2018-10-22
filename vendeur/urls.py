@@ -24,6 +24,8 @@ urlpatterns = [
 
 	re_path(r'^stat/print$', views.print_stat, name="print_stat"),
 
+	re_path(r'^admproduit$',views.adm_product,name="adm_product"),
+
 	re_path(r'^deconncter/$', views.deconncter, name="deconncter"),
 	re_path(r'^$', views.home, name="home"),
 

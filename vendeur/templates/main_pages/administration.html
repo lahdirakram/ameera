@@ -4,6 +4,11 @@
 {% block activeAdm %}active{% endblock%}
 {% block activeAdm_side %}active{% endblock%}
 {% block content %}
+<style type="text/css">
+	#prodimagepreview > img{
+		width: 100%;
+	}
+</style>
 <div class="container">
 	<div id="table_des_ventes" class="stat_table_container">
 		<div class="row">
@@ -11,7 +16,7 @@
 				<h4>Table des ventes</h4>
 			</div>
 			<div class="col-4" style="text-align:right; ">
-				<button class="btn btn-outline-dark btn-sm "style="margin-bottom: 10px; ">Nouveau produit</button>
+				<button class="btn btn-outline-dark btn-sm" style="margin-bottom: 10px;" data-toggle="modal" data-target="#prodmodal" id="addprod">Nouveau produit</button>
 			</div>
 		</div>
 
@@ -39,11 +44,11 @@
 						</td>
 						<td>{{p.qte}}</td>
 						<td>{{p.pu}}</td>
-						<td style="text-align: right;">
+						<td cpt='{{p.id}}' style="text-align: right;">
 							{% if p.sell == 0 %}
 								<button class="btn btn-outline-dark btn-sm">Supprimer</button>
 							{% endif %}
-							<button class="btn btn-outline-dark btn-sm">Modifier</button>
+							<button class="btn btn-outline-dark btn-sm editprod" data-toggle="modal" data-target="#prodmodal">Modifier</button>
 						</td>
 
 					</tr>
@@ -101,4 +106,124 @@
 		</div>
 	</div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="prodmodal"tabindex="-1" role="dialog" aria-labelledby="prodmodalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #343a40; color: white;">
+        <h5 class="modal-title" id="prodmodalLabel"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color: white;">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<div class="container">
+			<form style="padding: 20px;">
+				{% csrf_token %}
+				<div class="form-group">
+					<label for="qte_id">Nom du produit :</label>
+					<input class="form-control " type="text" name="prod_name">
+					<small class="text-muted">veuiller entre le nom du produit .</small>
+				</div>
+				<div class="form-group">
+					<label for="qte_id">Prix unitaire du produit :</label>
+					<input class="form-control " type="number" name="prod_PU">
+					<small class="text-muted">veuiller entre le prix unitaire du produit .</small>
+				</div>
+				<div class="form-group">
+					<label for="qte_id">Quantité du produit :</label>
+					<input class="form-control " type="number" name="prod_Q">
+					<small class="text-muted">veuiller entre la quantité du produit.</small>
+				</div>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-8">
+							<label for="qte_id">Image du produit :</label>
+							<input class="form-control " type="file" name="prod_image">
+							<small class="text-muted">veuiller choisir une image du produit.</small>	
+						</div>
+						<div id="prodimagepreview" class="col-4" style="margin: auto;padding: 0;">		<img src="">
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<input id="prod_submit" class="form-control btn btn-outline-dark" type="submit" name="submit">
+				</div>
+			</form>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+
+	$('#addprod').click(function (e) {
+		$('#prodmodalLabel').html('Ajout d\'un nouveau produit');
+		$('input[name="prod_name"]').val('');
+		$('input[name="prod_PU"]').val('');
+		$('input[name="prod_Q"]').val('');
+		$('input[name="prod_image"]').val();
+		$('#prodimagepreview > img').attr('src','');
+	});
+	$('input[name="prod_image"]').on("change",function (e) {
+		    for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+		        var file = e.originalEvent.srcElement.files[i];
+		        var img = document.createElement("img");
+		        var reader = new FileReader();
+		        reader.onloadend = function() {
+		            img.src = reader.result;
+		        }
+		        reader.readAsDataURL(file);
+		        $("#prodimagepreview").html(img);
+		    }
+	});
+	$('.editprod').click(function (e) {
+		$('#prodmodalLabel').html('Mise a jour d\'un produit');
+		var cpt = $(this).parent().attr('cpt');
+
+		$.ajax({
+			type:"POST",
+			url:"{% url 'adm_product' %}",
+			data:{
+				csrfmiddlewaretoken: '{{csrf_token}}',
+				id:cpt
+			},
+			success:function (product) {
+				$('input[name="prod_name"]').val(product['name']);
+				$('input[name="prod_PU"]').val(product['pu']);
+				$('input[name="prod_Q"]').val(product['q']);
+				$('input[name="prod_image"]').val();
+				$('#prodimagepreview > img').attr('src',product['image']);
+			}
+		});
+	});
+
+	$(".prod_submit").on("click", function(e) {
+	    var form = $("#Form");
+	    var formData = new FormData(form[0]);
+
+	    //if you only need to upload files then 
+	    //Grab the File upload control and append each file manually to FormData
+	    //var files = form.find("#fileupload")[0].files;
+
+	    //$.each(files, function() {
+	    //  var file = $(this);
+	    //  formData.append(file[0].name, file[0]);
+	    //});
+
+	    if ($(form).valid()) {
+	        $.ajax({
+	            type: "POST",
+	            url: $(form).prop("action"),
+	            //dataType: 'json',
+	            data: formData,
+	            contentType: false,
+	            processData: false,
+	            //cache: false,
+	            error   : ErrorHandler,
+	            success : successHandler
+	        });
+	    }
+	});
+</script>
 {% endblock %}
