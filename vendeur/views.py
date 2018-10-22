@@ -276,13 +276,28 @@ def stat_graph(request):
 	money_graph_series=[{'name': 'Money','data': money_list }]
 	return JsonResponse({'money_graph_series':money_graph_series,'ventes_graph_series':ventes_graph_series,'d_d':str(date_deb),'d_f':str(date_fin)})
 def stat_testeur(request):
-
 	user = check_in(request)
 	if  user == None:
 		return HttpResponse('Acces non autorisé')
 	testeurList=prod_test.tests()
 	return JsonResponse({'testeurList':testeurList})
 
+############################ ADMINISTRATION
+
+def adm_product(request):
+	user = check_in(request)
+	if  user == None or user.vend_admin == 0:
+		return HttpResponse('Acces non autorisé')
+	to_return=None
+	if request.method == "POST":
+		if request.POST.get('id') != None:
+			try:
+				prod = Product.objects.get(id=int(request.POST.get('id')))
+				to_return={'name':prod.prod_name,'pu':prod.prod_PU,'q':prod.prod_Q,'image':prod.prod_image.url}
+			except :
+				to_return=None
+
+	return JsonResponse(to_return)
 
 ############################" PRINT"
 def print_stat(request):
