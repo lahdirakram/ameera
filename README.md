@@ -1,2 +1,2 @@
 # ameera
-Stock management app for ameera london store
+Stock management app for ameera london store algiers
