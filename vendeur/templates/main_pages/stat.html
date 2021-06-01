@@ -102,8 +102,8 @@
 			<div class="col-9">
 				<h4>Historique des ventes</h4>
 			</div>
-			<div class="col-3">
-				<button class="btn btn-outline-dark btn-sm" id="hist-opt" style="float: right;" >Periode</button>
+		    <div class="col-3">
+				<button class="btn btn-dark btn-sm" id="hist-opt" style="float: right;" >Periode</button>
 				<div id="hist-opt-div" style="z-index: 1;position: absolute;top: 0;right: 20%;background: white;border: 1px solid#dee2e6;">
 					<div style="position: relative;padding: 20px;">
 					<div class="form-group">
@@ -228,7 +228,7 @@
 		</ul>
 		</div>
 		<div class="col-4" style="position: relative; padding: 0; border-bottom: 1px solid #dee2e6; ">
-				<button class="btn btn-outline-dark btn-sm" id="graph-opt" style="float: right;" onclick="graph_form_on_off();">Periode</button>
+				<button class="btn btn-dark btn-sm" id="graph-opt" style="float: right;" onclick="graph_form_on_off();">Periode</button>
 				<div id="graph-opt-div" style="z-index: 1;position: absolute;top: 0;right: 20%;background: white;border: 1px solid#dee2e6;">
 					<div style="position: relative;padding: 20px;">
 					{% csrf_token %}
@@ -417,6 +417,7 @@
 				graph__["ventes_graph_series"]=dict_to_utc(graph__["ventes_graph_series"]);
 
 				money = Highcharts.chart('money', {
+				    chart: {type: 'area'},
 				 	title: {text: 'Variation des recette'},
 				 	subtitle: {text: 'Source: carnet de ventes'},
 				 	xAxis: {type: 'datetime',dateTimeLabelFormats: {month: '%e. %b',year: '%b'},title: {text: 'Date'}},

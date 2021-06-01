@@ -1,8 +1,8 @@
 from django.db import models
-
+import datetime
 # Create your models here.
 class Product(models.Model):
-	
+
 	prod_name=models.TextField()
 	prod_image=models.FileField(upload_to='images/')
 	prod_PU=models.IntegerField(null=True)
@@ -19,15 +19,21 @@ class Product(models.Model):
 		return products;
 
 	def __str__(self):
-		return self.prod_name	
+		return self.prod_name
 class history(models.Model):
-	
+
 	hist_date=models.DateField()
 	hist_prod_id=models.ForeignKey(Product,on_delete=models.CASCADE,null=False)
 	hist_nbr_sell=models.IntegerField()
 	hist_money=models.BigIntegerField()
 	hist_prix_sell=models.IntegerField(null=True)
 	hist_etat=models.IntegerField(default=0)
+
+	@staticmethod
+	def createblankhistory():
+	    a=history.objects.filter(hist_date=datetime.date.today())
+	    if(not a.exists()):
+		    history.objects.create(hist_date=datetime.date.today(),hist_nbr_sell=0,hist_money=0,hist_prod_id=Product.objects.get(id=0),hist_prix_sell=None,hist_etat=1)
 
 	@staticmethod
 	def history_query(date_deb,date_fin):
@@ -64,12 +70,12 @@ class vendeur(models.Model):
 		return self.vend_name
 
 class user_bis(models.Model):
-	
+
 	user=models.ForeignKey(vendeur,on_delete=models.CASCADE,null=False)
 	user_coockie_hash=models.TextField(default="")
 
 class prod_test(models.Model):
-	
+
 	prod=models.ForeignKey(Product,on_delete=models.CASCADE,null=False)
 	date=models.DateField()
 	qte=models.IntegerField(default=1)
@@ -81,11 +87,11 @@ class prod_test(models.Model):
 			test = {'date':t.date.strftime('%d %B %Y'),'prod':t.prod.prod_name,'qte':t.qte}
 			testeurList.append(test)
 		return testeurList
-		
+
 	def __str__(self):
 		return self.prod.prod_name
-		
-		
-		
+
+
+
 
 
